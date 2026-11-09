@@ -1,0 +1,8 @@
+{
+  "설명": "알림을 받을 나라 목록. 이 파일을 복사해 이름을 구독설정.json 으로 바꿔 쓰세요. override.until 전까지는 override.countries 를 쓰고, 지나면 default 로 자동 복귀합니다(필요 없으면 override 를 지워도 됩니다).",
+  "default": [
+    "일본",
+    "미국",
+    "말레이시아"
+  ]
+}

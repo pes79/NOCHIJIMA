@@ -1,0 +1,693 @@
+{
+ "설명": "지원 나라의 흔한 도시·주 줄임말과 현지·외국어 약칭 → [공식 이름(영어), 주·도(영어)]. AI판단.quote_ok 가 '장소 근거 인용문'을 확인할 때 씀(2026-10-15). 영어 4글자 이하 줄임말(LA·NY·SP 등)은 대문자 그대로·낱말 단위로만 맞춤. 가타카나 줄임말은 앞뒤에 다른 가타카나가 붙으면(クロス·ロスト) 맞추지 않음. 새 줄임말은 이 파일에 나라별로 보태면 됨.",
+ "나라": {
+  "미국": {
+   "LA": [
+    "Los Angeles",
+    "California"
+   ],
+   "L.A.": [
+    "Los Angeles",
+    "California"
+   ],
+   "ロス": [
+    "Los Angeles",
+    "California"
+   ],
+   "ロサンゼルス": [
+    "Los Angeles",
+    "California"
+   ],
+   "洛杉矶": [
+    "Los Angeles",
+    "California"
+   ],
+   "洛杉磯": [
+    "Los Angeles",
+    "California"
+   ],
+   "NY": [
+    "New York",
+    "New York"
+   ],
+   "N.Y.": [
+    "New York",
+    "New York"
+   ],
+   "NYC": [
+    "New York",
+    "New York"
+   ],
+   "ニューヨーク": [
+    "New York",
+    "New York"
+   ],
+   "纽约": [
+    "New York",
+    "New York"
+   ],
+   "紐約": [
+    "New York",
+    "New York"
+   ],
+   "SF": [
+    "San Francisco",
+    "California"
+   ],
+   "サンフランシスコ": [
+    "San Francisco",
+    "California"
+   ],
+   "旧金山": [
+    "San Francisco",
+    "California"
+   ],
+   "三藩市": [
+    "San Francisco",
+    "California"
+   ],
+   "D.C.": [
+    "Washington",
+    "District of Columbia"
+   ],
+   "ワシントンDC": [
+    "Washington",
+    "District of Columbia"
+   ],
+   "Vegas": [
+    "Las Vegas",
+    "Nevada"
+   ],
+   "ラスベガス": [
+    "Las Vegas",
+    "Nevada"
+   ],
+   "Philly": [
+    "Philadelphia",
+    "Pennsylvania"
+   ],
+   "シカゴ": [
+    "Chicago",
+    "Illinois"
+   ],
+   "ハワイ": [
+    "",
+    "Hawaii"
+   ],
+   "ホノルル": [
+    "Honolulu",
+    "Hawaii"
+   ],
+   "シアトル": [
+    "Seattle",
+    "Washington"
+   ],
+   "ボストン": [
+    "Boston",
+    "Massachusetts"
+   ],
+   "ヒューストン": [
+    "Houston",
+    "Texas"
+   ],
+   "ダラス": [
+    "Dallas",
+    "Texas"
+   ]
+  },
+  "일본": {
+   "Tokio": [
+    "Tokyo",
+    "Tokyo"
+   ],
+   "Tóquio": [
+    "Tokyo",
+    "Tokyo"
+   ],
+   "Токио": [
+    "Tokyo",
+    "Tokyo"
+   ],
+   "东京": [
+    "Tokyo",
+    "Tokyo"
+   ],
+   "東京": [
+    "Tokyo",
+    "Tokyo"
+   ],
+   "大阪": [
+    "Osaka",
+    "Osaka"
+   ],
+   "Осака": [
+    "Osaka",
+    "Osaka"
+   ],
+   "京都": [
+    "Kyoto",
+    "Kyoto"
+   ],
+   "北海道": [
+    "",
+    "Hokkaido"
+   ],
+   "沖縄": [
+    "",
+    "Okinawa"
+   ],
+   "都内": [
+    "Tokyo",
+    "Tokyo"
+   ]
+  },
+  "말레이시아": {
+   "KL": [
+    "Kuala Lumpur",
+    "Kuala Lumpur"
+   ],
+   "K.L.": [
+    "Kuala Lumpur",
+    "Kuala Lumpur"
+   ],
+   "吉隆坡": [
+    "Kuala Lumpur",
+    "Kuala Lumpur"
+   ],
+   "JB": [
+    "Johor Bahru",
+    "Johor"
+   ],
+   "新山": [
+    "Johor Bahru",
+    "Johor"
+   ],
+   "PJ": [
+    "Petaling Jaya",
+    "Selangor"
+   ],
+   "槟城": [
+    "George Town",
+    "Penang"
+   ],
+   "檳城": [
+    "George Town",
+    "Penang"
+   ],
+   "Pulau Pinang": [
+    "George Town",
+    "Penang"
+   ],
+   "KK": [
+    "Kota Kinabalu",
+    "Sabah"
+   ],
+   "クアラルンプール": [
+    "Kuala Lumpur",
+    "Kuala Lumpur"
+   ]
+  },
+  "베트남": {
+   "HCMC": [
+    "Ho Chi Minh City",
+    "Ho Chi Minh"
+   ],
+   "TP.HCM": [
+    "Ho Chi Minh City",
+    "Ho Chi Minh"
+   ],
+   "TPHCM": [
+    "Ho Chi Minh City",
+    "Ho Chi Minh"
+   ],
+   "TP HCM": [
+    "Ho Chi Minh City",
+    "Ho Chi Minh"
+   ],
+   "Sài Gòn": [
+    "Ho Chi Minh City",
+    "Ho Chi Minh"
+   ],
+   "Saigon": [
+    "Ho Chi Minh City",
+    "Ho Chi Minh"
+   ],
+   "Hà Nội": [
+    "Hanoi",
+    "Hanoi"
+   ],
+   "Đà Nẵng": [
+    "Da Nang",
+    "Da Nang"
+   ],
+   "ホーチミン": [
+    "Ho Chi Minh City",
+    "Ho Chi Minh"
+   ],
+   "ハノイ": [
+    "Hanoi",
+    "Hanoi"
+   ]
+  },
+  "태국": {
+   "กทม.": [
+    "Bangkok",
+    "Bangkok"
+   ],
+   "กรุงเทพฯ": [
+    "Bangkok",
+    "Bangkok"
+   ],
+   "กรุงเทพ": [
+    "Bangkok",
+    "Bangkok"
+   ],
+   "曼谷": [
+    "Bangkok",
+    "Bangkok"
+   ],
+   "バンコク": [
+    "Bangkok",
+    "Bangkok"
+   ],
+   "Bangkok": [
+    "Bangkok",
+    "Bangkok"
+   ]
+  },
+  "필리핀": {
+   "QC": [
+    "Quezon City",
+    "Metro Manila"
+   ],
+   "Metro Manila": [
+    "Manila",
+    "Metro Manila"
+   ],
+   "NCR": [
+    "Manila",
+    "Metro Manila"
+   ],
+   "CDO": [
+    "Cagayan de Oro",
+    "Misamis Oriental"
+   ],
+   "マニラ": [
+    "Manila",
+    "Metro Manila"
+   ],
+   "马尼拉": [
+    "Manila",
+    "Metro Manila"
+   ]
+  },
+  "인도네시아": {
+   "Jabodetabek": [
+    "Jakarta",
+    "Jakarta"
+   ],
+   "DKI": [
+    "Jakarta",
+    "Jakarta"
+   ],
+   "Jogja": [
+    "Yogyakarta",
+    "Yogyakarta"
+   ],
+   "Yogya": [
+    "Yogyakarta",
+    "Yogyakarta"
+   ],
+   "Jatim": [
+    "",
+    "East Java"
+   ],
+   "Jabar": [
+    "",
+    "West Java"
+   ],
+   "Jateng": [
+    "",
+    "Central Java"
+   ],
+   "Sumut": [
+    "",
+    "North Sumatra"
+   ],
+   "Sumbar": [
+    "",
+    "West Sumatra"
+   ],
+   "Sulsel": [
+    "",
+    "South Sulawesi"
+   ],
+   "NTT": [
+    "",
+    "East Nusa Tenggara"
+   ],
+   "NTB": [
+    "",
+    "West Nusa Tenggara"
+   ],
+   "Kaltim": [
+    "",
+    "East Kalimantan"
+   ],
+   "ジャカルタ": [
+    "Jakarta",
+    "Jakarta"
+   ],
+   "バリ": [
+    "",
+    "Bali"
+   ],
+   "雅加达": [
+    "Jakarta",
+    "Jakarta"
+   ]
+  },
+  "인도": {
+   "Bombay": [
+    "Mumbai",
+    "Maharashtra"
+   ],
+   "Calcutta": [
+    "Kolkata",
+    "West Bengal"
+   ],
+   "Madras": [
+    "Chennai",
+    "Tamil Nadu"
+   ],
+   "Bangalore": [
+    "Bengaluru",
+    "Karnataka"
+   ],
+   "J&K": [
+    "",
+    "Jammu and Kashmir"
+   ],
+   "Delhi-NCR": [
+    "Delhi",
+    "Delhi"
+   ],
+   "ムンバイ": [
+    "Mumbai",
+    "Maharashtra"
+   ],
+   "デリー": [
+    "Delhi",
+    "Delhi"
+   ]
+  },
+  "대만": {
+   "台北": [
+    "Taipei",
+    "Taipei"
+   ],
+   "臺北": [
+    "Taipei",
+    "Taipei"
+   ],
+   "北市": [
+    "Taipei",
+    "Taipei"
+   ],
+   "新北": [
+    "New Taipei",
+    "New Taipei"
+   ],
+   "高雄": [
+    "Kaohsiung",
+    "Kaohsiung"
+   ],
+   "高市": [
+    "Kaohsiung",
+    "Kaohsiung"
+   ],
+   "台中": [
+    "Taichung",
+    "Taichung"
+   ],
+   "臺中": [
+    "Taichung",
+    "Taichung"
+   ],
+   "桃園": [
+    "Taoyuan",
+    "Taoyuan"
+   ],
+   "台南": [
+    "Tainan",
+    "Tainan"
+   ],
+   "花蓮": [
+    "Hualien",
+    "Hualien"
+   ],
+   "台北市": [
+    "Taipei",
+    "Taipei"
+   ],
+   "新北市": [
+    "New Taipei",
+    "New Taipei"
+   ]
+  },
+  "싱가포르": {
+   "S'pore": [
+    "Singapore",
+    "Singapore"
+   ],
+   "シンガポール": [
+    "Singapore",
+    "Singapore"
+   ]
+  },
+  "호주": {
+   "NSW": [
+    "",
+    "New South Wales"
+   ],
+   "QLD": [
+    "",
+    "Queensland"
+   ],
+   "Qld": [
+    "",
+    "Queensland"
+   ],
+   "シドニー": [
+    "Sydney",
+    "New South Wales"
+   ],
+   "メルボルン": [
+    "Melbourne",
+    "Victoria"
+   ],
+   "悉尼": [
+    "Sydney",
+    "New South Wales"
+   ],
+   "墨尔本": [
+    "Melbourne",
+    "Victoria"
+   ]
+  },
+  "캐나다": {
+   "B.C.": [
+    "",
+    "British Columbia"
+   ],
+   "GTA": [
+    "Toronto",
+    "Ontario"
+   ],
+   "トロント": [
+    "Toronto",
+    "Ontario"
+   ],
+   "バンクーバー": [
+    "Vancouver",
+    "British Columbia"
+   ],
+   "多伦多": [
+    "Toronto",
+    "Ontario"
+   ],
+   "温哥华": [
+    "Vancouver",
+    "British Columbia"
+   ]
+  },
+  "영국": {
+   "ロンドン": [
+    "London",
+    "England"
+   ],
+   "伦敦": [
+    "London",
+    "England"
+   ],
+   "Londres": [
+    "London",
+    "England"
+   ],
+   "Londra": [
+    "London",
+    "England"
+   ]
+  },
+  "독일": {
+   "NRW": [
+    "",
+    "North Rhine-Westphalia"
+   ],
+   "ベルリン": [
+    "Berlin",
+    "Berlin"
+   ],
+   "Berlino": [
+    "Berlin",
+    "Berlin"
+   ]
+  },
+  "프랑스": {
+   "パリ": [
+    "Paris",
+    "Ile-de-France"
+   ],
+   "巴黎": [
+    "Paris",
+    "Ile-de-France"
+   ],
+   "Parigi": [
+    "Paris",
+    "Ile-de-France"
+   ],
+   "Île-de-France": [
+    "",
+    "Ile-de-France"
+   ]
+  },
+  "브라질": {
+   "SP": [
+    "Sao Paulo",
+    "Sao Paulo"
+   ],
+   "RJ": [
+    "Rio de Janeiro",
+    "Rio de Janeiro"
+   ],
+   "BH": [
+    "Belo Horizonte",
+    "Minas Gerais"
+   ],
+   "RS": [
+    "",
+    "Rio Grande do Sul"
+   ],
+   "MG": [
+    "",
+    "Minas Gerais"
+   ],
+   "Sampa": [
+    "Sao Paulo",
+    "Sao Paulo"
+   ],
+   "サンパウロ": [
+    "Sao Paulo",
+    "Sao Paulo"
+   ]
+  },
+  "멕시코": {
+   "CDMX": [
+    "Mexico City",
+    "Mexico City"
+   ],
+   "Edomex": [
+    "",
+    "State of Mexico"
+   ],
+   "GDL": [
+    "Guadalajara",
+    "Jalisco"
+   ],
+   "メキシコシティ": [
+    "Mexico City",
+    "Mexico City"
+   ]
+  },
+  "아르헨티나": {
+   "CABA": [
+    "Buenos Aires",
+    "Buenos Aires"
+   ],
+   "ブエノスアイレス": [
+    "Buenos Aires",
+    "Buenos Aires"
+   ]
+  },
+  "러시아": {
+   "СПб": [
+    "Saint Petersburg",
+    "Saint Petersburg"
+   ],
+   "Питер": [
+    "Saint Petersburg",
+    "Saint Petersburg"
+   ],
+   "Москва": [
+    "Moscow",
+    "Moscow"
+   ],
+   "モスクワ": [
+    "Moscow",
+    "Moscow"
+   ]
+  },
+  "네덜란드": {
+   "A'dam": [
+    "Amsterdam",
+    "North Holland"
+   ],
+   "アムステルダム": [
+    "Amsterdam",
+    "North Holland"
+   ]
+  },
+  "이탈리아": {
+   "ローマ": [
+    "Rome",
+    "Lazio"
+   ],
+   "ミラノ": [
+    "Milan",
+    "Lombardy"
+   ]
+  },
+  "스페인": {
+   "マドリード": [
+    "Madrid",
+    "Madrid"
+   ],
+   "バルセロナ": [
+    "Barcelona",
+    "Catalonia"
+   ]
+  },
+  "튀르키예": {
+   "イスタンブール": [
+    "Istanbul",
+    "Istanbul"
+   ]
+  },
+  "뉴질랜드": {
+   "オークランド": [
+    "Auckland",
+    "Auckland"
+   ]
+  }
+ }
+}

@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>놓치지마 · 자녀가 있는 나라·도시 카톡으로 보내기</title>
+<meta name="description" content="자녀가 있는 나라와 사는 도시를 고른 뒤, 놓치지마 카카오톡 채널 채팅으로 보내주세요. 이 화면에서는 아무것도 저장·전송되지 않습니다.">
+<style>
+  :root{
+    --navy:#0E1420; --navy-2:#141C2B; --navy-3:#1B2536; --line:#26324a;
+    --text:#EAF0F8; --muted:#9AA7BC; --red:#E8483D; --green:#3DB56E;
+    --radius:16px; --maxw:660px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--navy);color:var(--text);line-height:1.65;letter-spacing:-0.01em;
+    font-family:"Apple SD Gothic Neo","Malgun Gothic","Segoe UI",-apple-system,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    word-break:keep-all;overflow-wrap:break-word;   /* 한국어 어절 단위 줄바꿈 */
+    background-image:radial-gradient(600px 300px at 50% -6%, rgba(232,72,61,.14), transparent 60%),
+                     radial-gradient(520px 300px at 85% 8%, rgba(61,181,110,.10), transparent 60%);
+    background-repeat:no-repeat}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 20px}
+
+  .topbar{border-bottom:1px solid var(--line);background:rgba(14,20,32,.7);backdrop-filter:blur(8px)}
+  .topbar .wrap{display:flex;align-items:center;gap:10px;height:62px}
+  .logo-img{height:32px;width:32px;object-fit:contain;border-radius:8px}
+  .logo-emoji{height:32px;width:32px;display:none;align-items:center;justify-content:center;font-size:20px;background:var(--navy-3);border-radius:8px;border:1px solid var(--line)}
+  .brand{font-weight:800;font-size:1.05rem}
+  .brand .sep{color:var(--muted);font-weight:500;margin:0 8px}
+  .brand .sub{color:var(--muted);font-weight:600;font-size:.95rem}
+  .back{margin-left:auto;color:var(--muted);text-decoration:none;font-size:.9rem;font-weight:600;
+    border:1px solid var(--line);border-radius:9px;padding:8px 13px;transition:color .15s,border-color .15s;white-space:nowrap}
+  .back:hover{color:var(--text);border-color:var(--green)}
+
+  .hero{text-align:center;padding:46px 0 8px}
+  .hero h1{font-size:clamp(1.7rem,5.5vw,2.4rem);font-weight:900;letter-spacing:-0.03em}
+  .hero p{color:var(--muted);margin-top:12px;font-size:1.02rem}
+  .kakao-note{display:inline-block;margin-top:16px;background:rgba(61,181,110,.10);border:1px solid var(--line);
+    border-radius:999px;padding:9px 16px;font-size:.9rem;color:var(--text)}
+
+  .formcard{background:var(--navy-2);border:1px solid var(--line);border-radius:var(--radius);
+    padding:26px 24px 28px;margin:26px 0 20px}
+  .field{margin-bottom:22px}
+  .field > label.lab{display:block;font-weight:700;font-size:.98rem;margin-bottom:9px}
+  .req{color:var(--red);font-size:.85rem;margin-left:4px}
+  .opt{color:var(--muted);font-size:.82rem;font-weight:500;margin-left:6px}
+  input[type=email],input[type=text],input[type=search]{width:100%;background:var(--navy);border:1px solid var(--line);
+    color:var(--text);border-radius:11px;padding:13px 15px;font-size:1rem;outline:none;transition:border-color .15s;
+    -webkit-appearance:none;appearance:none}
+  input[type=email]:focus,input[type=text]:focus,input[type=search]:focus{border-color:var(--green)}
+  input::placeholder{color:var(--muted);opacity:.8}
+  input::placeholder{color:#5c6b83}
+
+  .chips{display:flex;flex-wrap:wrap;gap:9px}
+  .chip{position:relative;cursor:pointer;user-select:none}
+  .chip input{position:absolute;opacity:0;width:0;height:0}
+  .chip span{display:inline-flex;align-items:center;gap:6px;background:var(--navy);
+    border:1px solid var(--line);color:var(--muted);border-radius:999px;padding:9px 14px;
+    font-size:.92rem;font-weight:600;transition:all .15s}
+  .chip input:checked + span{background:rgba(61,181,110,.14);border-color:var(--green);color:var(--text)}
+  .chip input:focus-visible + span{outline:2px solid var(--green);outline-offset:2px}
+  .chip.topic input:checked + span{background:rgba(232,72,61,.14);border-color:var(--red)}
+
+  .note{color:var(--muted);font-size:.85rem;margin-top:2px}
+
+  /* 자녀 블록 */
+  .kid{background:var(--navy);border:1px solid var(--line);border-radius:14px;padding:16px 14px;margin-bottom:14px}
+  .khead{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+  .ktitle{font-weight:900;font-size:1.12rem}
+  .kdel{margin-left:auto;background:none;border:1px solid var(--line);color:var(--muted);border-radius:9px;padding:7px 12px;font-size:.88rem;font-weight:700;cursor:pointer;font-family:inherit}
+  .klab{font-weight:800;font-size:1.05rem;margin:4px 0 10px}
+  .knote{color:var(--muted);font-size:.92rem;margin:-4px 0 4px}
+  .knote b{color:var(--text)}
+  .cbtn{background:var(--navy-2);border:1px solid var(--line);color:var(--muted);border-radius:999px;padding:10px 14px;font-size:.95rem;font-weight:600;cursor:pointer;font-family:inherit}
+  .cbtn.on{background:rgba(61,181,110,.14);border-color:var(--green);color:var(--text);font-weight:800}
+  .kchange{display:block;background:none;border:0;color:var(--green);font-weight:700;font-size:.9rem;padding:10px 2px 0;cursor:pointer;font-family:inherit;text-decoration:underline}
+  .kcity{margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}
+  .kcity input{width:100%;box-sizing:border-box;margin-top:8px}
+  .rbox.atmax .ritem:not(.on){opacity:.4}
+  .addkid{width:100%;background:transparent;border:1.5px dashed var(--green);color:var(--green);border-radius:12px;padding:14px;font-size:1.05rem;font-weight:800;cursor:pointer;font-family:inherit}
+  #worries .cbtn{white-space:nowrap}
+
+  /* 지역(도시) 고르기 */
+  .rrow{background:var(--navy);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:10px}
+  .rhead{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .rname{font-weight:700;font-size:.95rem}
+  .seg{margin-left:auto;display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+  .seg button{background:transparent;color:var(--muted);border:0;padding:7px 13px;font-size:.85rem;font-weight:700;cursor:pointer;font-family:inherit}
+  .seg button.on{background:rgba(61,181,110,.16);color:var(--text)}
+  .rcount{color:var(--muted);font-size:.8rem;margin:7px 2px 6px}
+  .rcount.warn{color:var(--red);font-weight:700}
+  .rbox{max-height:min(46vh,340px);overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;
+    background:var(--navy-2);border:1px solid var(--line);border-radius:11px}
+  .rsec{position:sticky;top:0;background:var(--navy-2);color:var(--muted);font-size:.78rem;font-weight:700;padding:9px 14px 6px;border-bottom:1px solid var(--line);z-index:1}
+  .ritem{display:flex;align-items:center;gap:8px;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid rgba(255,255,255,.04);
+    color:var(--text);padding:12px 14px;min-height:46px;font-size:.95rem;cursor:pointer;font-family:inherit}
+  .ritem:hover{background:rgba(61,181,110,.08)}
+  .ritem.on{background:rgba(61,181,110,.16)}
+  .rck{flex:0 0 18px;color:var(--green);font-weight:800}
+  .rmain{font-weight:600}
+  .rbox .sub{color:var(--muted);font-size:.8rem;margin-left:2px}
+  .rbox .msg{padding:10px 14px;color:var(--muted);font-size:.85rem}
+  .rchips{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px}
+  .rchip{display:inline-flex;align-items:center;gap:4px;background:rgba(61,181,110,.14);border:1px solid var(--green);
+    color:var(--text);border-radius:999px;padding:5px 6px 5px 12px;font-size:.88rem;font-weight:600}
+  .rchip button{background:none;border:0;color:var(--muted);cursor:pointer;font-size:1.05rem;line-height:1;padding:0 5px;font-family:inherit}
+  .rchip button:hover{color:var(--text)}
+  .agreebox{display:flex;align-items:center;gap:9px;color:var(--muted);font-size:.95rem;margin:4px 0 12px;cursor:pointer}
+  .agreebox input{flex:none;width:22px;height:22px;accent-color:var(--green);cursor:pointer}
+  .agreebox b{color:var(--text)} .agreebox a{color:var(--green)}
+  @media (max-width:430px){ .topbar .brand .sep,.topbar .brand .sub{display:none} .topbar .back{white-space:nowrap} }
+  .msgbox{white-space:pre-line;background:var(--navy);border:2px dashed var(--green);border-radius:12px;padding:16px;color:var(--text);
+    font-size:1.15rem;font-weight:700;line-height:1.6;word-break:keep-all;overflow-wrap:anywhere;
+    -webkit-user-select:all;user-select:all;cursor:text}
+  .msgbox.empty{border-color:var(--line);color:var(--muted);font-weight:500;font-size:1rem;-webkit-user-select:none;user-select:none}
+  a.kbtn{display:block;box-sizing:border-box;text-align:center;text-decoration:none;background:#FEE500;color:#191600}
+  a.kbtn:hover{filter:brightness(1.04)}
+  /* 안내 창(카톡으로 보내기 누른 뒤) — 375px·카카오톡 안 브라우저 기준 큰 글씨 */
+  .kmodal{position:fixed;top:0;left:0;right:0;bottom:0;z-index:1000;background:rgba(5,8,14,.82);
+    display:flex;align-items:flex-start;justify-content:center;padding:16px;overflow-y:auto;-webkit-overflow-scrolling:touch}
+  .kmodal[hidden]{display:none}
+  .kcard{position:relative;width:100%;max-width:440px;margin:auto 0;background:var(--navy-2);border:1px solid var(--line);
+    border-radius:18px;padding:24px 18px 18px;box-shadow:0 18px 50px rgba(0,0,0,.45)}
+  .kclose{position:absolute;top:8px;right:8px;width:44px;height:44px;border:none;background:transparent;color:var(--muted);
+    font-size:1.3rem;cursor:pointer;border-radius:10px;font-family:inherit}
+  .ktitle{font-size:1.32rem;font-weight:900;line-height:1.4;padding-right:36px;letter-spacing:-0.02em}
+  .ktitle.fail{color:#ffb3ad}
+  .kmsg{margin-top:14px;font-size:1.05rem;max-height:32vh;overflow-y:auto}
+  .kmsg.fail{border-color:#ffb3ad;border-style:solid;max-height:none}   /* 직접 복사해야 하니 글 전체를 보여줌 */
+  .khint{color:var(--muted);font-size:.9rem;margin-top:6px}
+  .ksteps{list-style:none;margin:18px 0 0;padding:0}
+  .ksteps li{display:flex;gap:10px;align-items:flex-start;font-size:1.16rem;font-weight:700;line-height:1.5;margin-top:10px}
+  .ksteps li span{flex:0 0 auto;width:30px;height:30px;border-radius:50%;background:var(--green);color:#0b1a12;
+    display:inline-flex;align-items:center;justify-content:center;font-size:1rem;font-weight:900;margin-top:1px}
+  .ksteps b{color:#FEE500}
+  .kopen,.kagain{display:flex;align-items:center;justify-content:center;width:100%;min-height:56px;border-radius:12px;
+    font-family:inherit;font-size:1.16rem;font-weight:800;text-decoration:none;cursor:pointer;margin-top:12px}
+  .kopen{background:#FEE500;color:#191600;border:none;margin-top:20px}
+  .kagain{background:var(--navy);color:var(--text);border:1px solid var(--line)}
+  .ksmall{color:var(--muted);font-size:.9rem;text-align:center;margin-top:14px;line-height:1.6}
+  @media (max-height:700px){   /* 카카오톡 안 브라우저처럼 세로가 짧은 화면: 여백만 줄이고 안내 글씨 크기는 그대로 */
+    .kcard{padding:18px 16px 14px}
+    .ktitle{font-size:1.2rem}
+    .kmsg{margin-top:10px;max-height:24vh}
+    .ksteps{margin-top:12px}
+    .ksteps li{margin-top:6px}
+    .kopen{margin-top:14px}
+    .kopen,.kagain{min-height:50px;margin-top:10px}
+    .ksmall{margin-top:10px}
+  }
+  .submit{width:100%;margin-top:6px;background:var(--red);color:#fff;border:none;border-radius:12px;
+    padding:15px;font-size:1.05rem;font-weight:800;cursor:pointer;letter-spacing:-0.01em;transition:transform .1s,filter .15s}
+  .submit:hover{filter:brightness(1.08)}
+  .submit:active{transform:translateY(1px)}
+  .submit:disabled{opacity:.6;cursor:default}
+  .err{color:#ffb3ad;font-size:.9rem;margin-top:10px;display:none}
+
+  .privacy{color:#6b7788;font-size:.8rem;text-align:center;margin-top:4px;line-height:1.7}
+  .privacy a{color:var(--muted)}
+
+  /* 완료 화면 */
+  .done{display:none;text-align:center;background:var(--navy-2);border:1px solid var(--line);
+    border-radius:var(--radius);padding:48px 26px;margin:26px 0}
+  .done .big{font-size:52px;line-height:1}
+  .done h2{font-size:1.5rem;font-weight:900;margin-top:14px}
+  .done p{color:var(--muted);margin-top:10px}
+  .done .again{margin-top:22px;display:inline-block;color:var(--green);font-weight:700;
+    text-decoration:none;border:1px solid var(--line);border-radius:10px;padding:10px 18px;cursor:pointer}
+
+  footer{text-align:center;color:#6b7788;font-size:.8rem;padding:26px 0 40px}
+
+  @media (max-width:480px){
+    .hero{padding:34px 0 4px}
+    .formcard{padding:22px 18px}
+  }
+</style>
+</head>
+<body>
+
+  <div class="topbar">
+    <div class="wrap">
+      <img src="nochijima_logo.png" alt="놓치지마" class="logo-img"
+           onerror="this.style.display='none';document.getElementById('le').style.display='inline-flex';">
+      <span id="le" class="logo-emoji">🌍</span>
+      <span class="brand">놓치지마<span class="sep">·</span><span class="sub">사전신청</span></span>
+      <a href="index.html" class="back">← 서비스 소개 보기</a>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="hero">
+      <h1>자녀가 있는 나라·도시를<br>알려주세요</h1>
+      <p>나라와 도시를 고르고 <b style="color:var(--text)">카톡으로 보내기</b>를 누르세요.<br>고른 내용이 복사되고, 채팅방에 붙여넣는 방법을 안내해 드려요.</p>
+      <p class="kakao-note">💬 이 화면에서는 아무것도 저장·전송되지 않아요.</p>
+    </div>
+
+    <!-- 신청 폼 (자녀 1명 = 나라 1곳 + 도시 최대 2곳) -->
+    <form id="signupForm" class="formcard" novalidate>
+      <div id="kids"></div>
+
+      <button type="button" class="addkid" id="addKid">+ 자녀 추가</button>
+
+      <div class="field" id="worryField" style="margin-top:26px">
+        <label class="lab">자녀 유학에서 걱정되는 것을 모두 골라주세요<span class="opt">(선택)</span></label>
+        <div class="chips" id="worries">
+          <button type="button" class="cbtn" data-v="재난·사고">재난·사고</button>
+          <button type="button" class="cbtn" data-v="비자·체류">비자·체류</button>
+          <button type="button" class="cbtn" data-v="송금·환율">송금·환율</button>
+          <button type="button" class="cbtn" data-v="연락이 잘 안 됨">연락이 잘 안 됨</button>
+          <button type="button" class="cbtn" data-v="기타">기타</button>
+        </div>
+        <p class="knote" style="margin:8px 0 0">여러 개 골라도 되고, 안 골라도 보낼 수 있어요. 한 번 더 누르면 선택이 풀려요.</p>
+      </div>
+
+      <div class="field" id="msgField" style="margin-top:24px">
+        <label class="lab">보낼 내용<span class="opt">(이 글이 복사돼요)</span></label>
+        <div class="msgbox empty" id="msgBox">위에서 나라와 도시를 골라 주세요</div>
+      </div>
+
+      <a href="https://pf.kakao.com/_RxbxjiX/chat" target="_blank" rel="noopener" class="submit kbtn" id="sendBtn">💬 카톡으로 보내기</a>
+      <p class="privacy" style="margin-top:10px">신청하시면 자녀의 나라·도시 정보를 알림 발송에만 사용합니다. <a href="privacy.html" style="color:var(--green)">개인정보처리방침 보기</a></p>
+      <div class="err" id="errMsg"></div>
+
+      <p class="privacy" style="margin-top:14px">고른 내용은 이 화면에 저장되지 않고, <b>카카오톡으로 직접 보내실 때만</b> 저희에게 전달됩니다. 이름·이메일·전화번호는 받지 않습니다. <a href="privacy.html" style="color:var(--green)">개인정보처리방침 보기</a></p>
+    </form>
+
+    <footer>
+      <a href="index.html" style="color:var(--green);text-decoration:none;font-weight:700">← 서비스 소개 페이지로 돌아가기</a>
+      <div style="margin-top:12px;font-size:.78rem;line-height:1.8;opacity:.7">
+        [연락처] &nbsp;|&nbsp; <a href="privacy.html" style="color:inherit;text-decoration:underline">개인정보처리방침</a><br>
+        © 2026 놓치지마 (nochijima)
+      </div>
+    </footer>
+  </div>
+
+  <!-- 안내 창: '카톡으로 보내기'를 누르면 채팅방으로 바로 넘어가지 않고 이 창을 먼저 보여줌 -->
+  <div class="kmodal" id="kModal" role="dialog" aria-modal="true" aria-labelledby="kTitle" hidden>
+    <div class="kcard">
+      <button type="button" class="kclose" id="kClose" aria-label="닫기">✕</button>
+      <h2 class="ktitle" id="kTitle">신청 내용이 복사됐어요 ✅</h2>
+      <div class="msgbox kmsg" id="kMsg"></div>
+      <p class="khint" id="kHint">위 내용이 채팅방에 보낼 글이에요.</p>
+      <ol class="ksteps">
+        <li><span>1</span><div>아래 <b>'채팅방 열기'</b>를 누르세요</div></li>
+        <li><span>2</span><div>채팅 입력칸을 <b>길게 눌러 '붙여넣기'</b></div></li>
+        <li><span>3</span><div><b>전송</b> 버튼을 누르면 신청 완료!</div></li>
+      </ol>
+      <a href="https://pf.kakao.com/_RxbxjiX/chat" target="_blank" rel="noopener" class="kopen" id="kOpen">💬 채팅방 열기</a>
+      <button type="button" class="kagain" id="kAgain">📋 다시 복사</button>
+      <p class="ksmall">채팅방이 열리지 않으면 카카오톡에서 '놓치지마' 채널을 검색해 주세요</p>
+    </div>
+  </div>
+
+<script>
+  /* ▼ 방문자 분석(Umami) — index.html 과 같은 ID 를 넣으세요. 비워 두면 분석 없이 동작합니다. */
+  const UMAMI_WEBSITE_ID = "";
+  /* 내 방문 제외: 주소 뒤에 ?me=1 을 붙여 한 번 열면 이 브라우저는 방문 집계에서 빠집니다. (?me=0 으로 열면 다시 집계)
+     이 브라우저 안에만 저장되고 어디로도 전송되지 않습니다. */
+  let ME_OFF = false;
+  try{
+    const me = new URLSearchParams(location.search).get('me');
+    if(me === '1') localStorage.setItem('umami.disabled', '1');
+    if(me === '0') localStorage.removeItem('umami.disabled');
+    ME_OFF = localStorage.getItem('umami.disabled') === '1';
+    if(me === '1' || me === '0'){
+      const n = document.createElement('div');
+      n.textContent = ME_OFF ? '✅ 이 브라우저는 방문 집계에서 제외됩니다' : '방문 집계에 다시 포함됩니다';
+      n.style.cssText = 'position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:9999;background:#141C2B;color:#EAF0F8;border:1px solid #3DB56E;border-radius:12px;padding:12px 16px;font-size:15px;font-weight:700;max-width:90vw;text-align:center';
+      (document.body || document.documentElement).appendChild(n);
+      setTimeout(function(){ n.remove(); }, 6000);
+    }
+  }catch(e){}
+  if(UMAMI_WEBSITE_ID && !ME_OFF){ const u=document.createElement('script'); u.defer=true; u.src='https://cloud.umami.is/script.js'; u.setAttribute('data-website-id', UMAMI_WEBSITE_ID); document.head.appendChild(u); }
+  function track(name, data){ try{ if(window.umami) window.umami.track(name, data); }catch(e){} }
+
+  const form = document.getElementById('signupForm');
+  const errMsg = document.getElementById('errMsg');
+  form.addEventListener('submit', function(e){ e.preventDefault(); });   // 이 화면은 어디로도 전송하지 않음
+
+  function showErr(t, el){ errMsg.textContent=t; errMsg.style.display='block'; if(el) el.scrollIntoView({behavior:'smooth', block:'center'}); }
+
+/*ADMIN_REGIONS_START*/
+const ADMIN_REGIONS = {"네덜란드":[["NL.06","노르트브라반트주","North Brabant","노르트 브라반트 주 노르트브라반트 노르트브라반트 주 북브라반트 주 북브라반트주"],["NL.07","노르트홀란트주","North Holland","노르트 홀란트 주 노르트홀란트 노르트홀란트 주 북홀란트 주"],["NL.01","드렌터주","Drenthe","드렌터 드렌터 주 드렌테 드렌테 주"],["NL.05","림뷔르흐주","Limburg",""],["NL.15","오버레이설주","Overijssel","오버레이설 오버레이설 주 오버레이셀 주"],["NL.09","위트레흐트주","Utrecht","위트레흐트 주"],["NL.11","자위트홀란트주","South Holland","남홀란트 주 자위트 홀란트 주 자위트홀란트 자위트홀란트 주"],["NL.10","제일란트주","Zeeland","제일란트 제일란트 주 젤란트 젤란트 주 젤란트주 질란드"],["NL.02","프리슬란트주","Friesland","프리슬란트 주"],["NL.16","플레볼란트주","Flevoland","플레볼란트 플레볼란트 주"],["NL.03","헬데를란트주","Gelderland","헬데를란트 헬데를란트 주"],["NL.04","흐로닝언주","Groningen","그로닝겐 주 흐로닝겐 주 흐로닝언 주"]],"뉴질랜드":[["NZ.F1","기즈번 지방","Gisborne","기즈번 지역 기즈번지방"],["NZ.F5","넬슨 지방","Nelson Region","넬슨지방"],["NZ.F6","노스랜드 지방","Northland","노스랜드지방 노슬랜드 지방"],["NZ.F3","마너와투왕거누이 지방","Manawatu-Wanganui","마나와투 왕가누이 마나와투 왕가누이 지방 마나와투 왕거누이 지방 마너와투 왕거누이 마너와투 왕거누이 지방 마너와투-왕거누이 마너와투왕거누이 마너와투왕거누이지방"],["NZ.F4","말버러 지방","Marlborough","말버러지방 말보로 지방"],["NZ.E8","베이오브플렌티 지방","Bay of Plenty","베이 오브 플렌티 베이오브플렌티 베이오브플렌티지방"],["NZ.F8","사우스랜드 지방","Southland","사우스랜드지방 사우슬랜드 사우슬랜드 지방"],["NZ.E7","오클랜드 지방","Auckland","오클랜드 지역 오클랜드지방"],["NZ.F7","오타고 지방","Otago","오타고 오타고지방"],["NZ.G1","와이카토 지방","Waikato Region","와이카토 와이카토지방"],["NZ.G3","웨스트코스트 지방","West Coast","웨스트 코스트 지방 웨스트코스트지방"],["NZ.G2","웰링턴 지방","Wellington Region","웰링턴지방"],["NZ.10","채텀 제도","Chatham Islands",""],["NZ.E9","캔터베리 지방","Canterbury","캔터버리 지방 캔터베리 캔터베리지방"],["NZ.F9","타라나키 지방","Taranaki Region","타라나키 타라나키지방"],["NZ.TAS","태즈먼 지방","Tasman District","타스만 지방 태즈만 지방 태즈먼지방"],["NZ.F2","호크스베이 지방","Hawke's Bay Region","호크스 베이 호크스베이 호크스베이지방 혹스베이"]],"대만":[["TW.02.KHH","가오슝시","Kaohsiung",""],["TW.04.NAN","난터우현","Nantou","난터우 현 남투현"],["TW.01.LIE","롄장현","Lienchiang",""],["TW.04.MIA","먀오리현","Miaoli","먀오리 현 묘률현 묘율현"],["TW.03.TPQ","신베이시","New Taipei City","뉴타이베이 대북현 신베이 시 신북시 타이베이 현 타이베이현"],["TW.04.HSQ","신주 시","Hsinchu",""],["TW.04.HSZ","신주현","Hsinchu County","신주 현 신죽현"],["TW.04.YUN","윈린현","Yunlin","운림현 윈린 현"],["TW.04.ILA","이란현","Yilan","이란 현"],["TW.04.CYI","자이시","Chiayi","가의시 자이 시"],["TW.04.CYQ","자이현","Chiayi County","가의현 자이 현"],["TW.04.CHA","장화현","Changhua","장화 현 창화 현 창화현"],["TW.04.KEE","지룽시","Keelung","계룡 기륭 기륭시 께랑 께랑치 지룽 지룽 시"],["TW.01.KIN","진먼현","Kinmen County","금문도 금문현 진먼 진먼 섬 진먼 현 진먼섬"],["TW.04.TAO","타오위안시","Taoyuan","도원시 도원현 타오위안 시 타오위엔 시"],["TW.04.TNN","타이난시","Tainan","대남 대남시 부성 타이난 시"],["TW.04.TTT","타이둥현","Taitung","타이둥 현"],["TW.04.TPE","타이베이시","Taipei City",""],["TW.04.TXG","타이중시","Taichung City","대중시 타이중 타이중 시"],["TW.04.PEN","펑후현","Penghu County","팽호현 펑후 현"],["TW.04.PIF","핑둥현","Pingtung","병동현 핑둥 현"],["TW.04.HUA","화롄현","Hualien","화련현 화롄 현"]],"독일":[["DE.07","노르트라인베스트팔렌주","North Rhine-Westphalia","노르트 라인 베스트팔렌 주 노르트라인 베스트팔렌 노르트라인-베스트팔렌 노르트라인-베스트팔렌 주 노르트라인베스트팔렌 노르트라인베스트팔렌 주 북라인베스트팔렌 주"],["DE.06","니더작센주","Lower Saxony","니더작센 니더작센 주"],["DE.08","라인란트팔츠주","Rheinland-Pfalz","라인란트 팔츠 주 라인란트-팔츠 라인란트-팔츠 주 라인란트팔츠 라인란트팔츠 주"],["DE.12","메클렌부르크포어포메른주","Mecklenburg-Vorpommern","메클렌부르크 포어포메른 주 메클렌부르크-포어포메른 메클렌부르크-포어포메른 주 메클렌부르크포어포메른 메클렌부르크포어포메른 주"],["DE.01","바덴뷔르템베르크주","Baden-Wurttemberg","바덴 뷔르템베르크 바덴 뷔르템베르크 주 바덴-뷔르템베르크 바덴-뷔르템베르크 주 바덴뷔르템베르그 주 바덴뷔르템베르크 바덴뷔르템베르크 주"],["DE.02","바이에른주","Bavaria","바바리아 바바리아 주 바바리아주 바이에른 바이에른 자유주 바이에른 주"],["DE.16","베를린","State of Berlin","백림 베를린 주 베를린주"],["DE.11","브란덴부르크주","Brandenburg","브란덴부르그 주 브란덴부르그주 브란덴부르크 주"],["DE.03","브레멘주","Bremen","브레멘 자유시 브레멘 주 자유 한자 도시 브레멘"],["DE.10","슐레스비히홀슈타인주","Schleswig-Holstein","슐레스비히 홀슈타인 슐레스비히 홀슈타인 주 슐레스비히-홀슈타인 슐레스비히-홀슈타인 주 슐레스비히홀슈타인 슐레스비히홀슈타인 주"],["DE.09","자를란트주","Saarland","자르 자를란트 자를란트 주"],["DE.04","자유 한자 도시 함부르크","Hamburg",""],["DE.14","작센안할트주","Saxony-Anhalt","작센 안할트 작센 안할트 주 작센-안할트 작센-안할트 주 작센안할트 작센안할트 주"],["DE.13","작센주","Saxony","DE-SN 삭소니 색소니 색스니 작센 작센 자유주 작센 주 작스카"],["DE.15","튀링겐주","Thuringia","슈린지아 슈린지아 주 튀링겐 튀링겐 자유주 튀링겐 주 튀링엔 튀링엔 자유주 튀링엔 주 튜링엔 튜링엔 주 튜링엔주"],["DE.05","헤센주","Hesse","헤센 헤센 주"]],"러시아":[["RU.50","네네츠 자치구","Nenets","네네츠자치구"],["RU.53","노보시비르스크주","Novosibirsk Oblast","노보시비르스크 주"],["RU.52","노브고로드주","Novgorod Oblast","노브고로드 주 노브고로트 주 노브고로트주"],["RU.51","니즈니노브고로드주","Nizhny Novgorod Oblast","고르키주 (소련) 니주니노브고로트 주 니주니노브고로트주 니즈니노브고로드 니즈니노브고로드 주"],["RU.17","다게스탄 공화국","Dagestan","다게스딴 다게스딴 공화국 다게스탄 다게스탄공화국 다케스탄"],["RU.62","랴잔주","Ryazan Oblast","랴잔 주"],["RU.42","레닌그라드주","Leningradskaya Oblast'","레닌그라드 레닌그라드 주 레닌그라드스카야주"],["RU.61","로스토프주","Rostov","로스또브 주 로스또브주 로스토프 주"],["RU.43","리페츠크주","Lipetsk Oblast","리페츠크 주"],["RU.44","마가단주","Magadan Oblast","마가단 주"],["RU.45","마리옐 공화국","Mariy-El Republic","마리엘 마리엘 공화국 마리옐 마리옐공화국"],["RU.46","모르도비야 공화국","Mordoviya Republic","모르도바 모르도바 공화국 모르도바공화국 모르도비아 모르도비아 공화국 모르도비야 모르드바 공화국"],["RU.48","모스크바","Moscow","러시아의 수도 막사과 모스코바 모스크바 연방시"],["RU.47","모스크바주","Moscow Oblast","모스크바 주 포드모스코비에"],["RU.49","무르만스크주","Murmansk","무르만스카야 오블라스티 무르만스크 주"],["RU.08","바시코르토스탄 공화국","Bashkortostan Republic","바슈코르토스탄 바슈코르토스탄 공화국 바슈키르 공화국 바슈키리야 바슈키리야 공화국 바시코르토스탄 바시키르 바시키르 공화국 바시키르공화국 바시키리야"],["RU.09","벨고로드주","Belgorod Oblast","벨고로드 주 벨고로트 주 벨고로트주"],["RU.86","보로네시주","Voronezh Oblast","보로네슈 주 보로네시 주 보로네시스카야 오블라스티"],["RU.84","볼고그라드주","Volgograd Oblast","볼고그라드 주"],["RU.85","볼로그다주","Vologda Oblast","볼로그다 주"],["RU.11","부랴티야 공화국","Buryatiya Republic","부라야트 부랴찌야 부랴찌야 공화국 부랴트 부랴트 공화국 부랴트공화국 부랴티아 부랴티아 공화국 부랴티아공화국 부랴티야"],["RU.68","북오세티야-알라니야","North Ossetia–Alania","러시아령 북오세티아 북부 오세찌야 북부 오세찌야 공화국 북부 오쎄찌야 북부 오쎄찌야 공화국 북부오세찌야 북부오세찌야 공화국 북부오쎄찌야 북부오쎄찌야 공화국 북오세티아 북오세티야 북오세티야 공화국 북오세티야-알라니야 공화국 북오세티야–알라니야 공화국 북오세티야공화국 세베로오세티야 세베로오세티야 공화국 세베로오세티야공화국 세베르나야오세티야 알라니야 오세티야 North Ossetia-Alania"],["RU.10","브랸스크주","Bryansk Oblast","브랸스크 주"],["RU.83","블라디미르주","Vladimir Oblast","블라디미르 주 울라지미르 주"],["RU.67","사라토프주","Saratov Oblast","사라토프 주"],["RU.65","사마라주","Samara Oblast","사마라 주"],["RU.63","사하 공화국","Sakha","사카 공화국 사하 사하 (야쿠티야) 사하공화국 야쿠트 공화국 야쿠티아 야쿠티아 공화국 야쿠티야 야쿠티야 공화국"],["RU.64","사할린주","Sakhalin Oblast","사할린 주 싸할린 주"],["RU.66","상트페테르부르크","St.-Petersburg","레닌 그라드 레닌그라드 레닌그라트 뻬뜨로그라드 뻬쩨르부르그 산크트 페테르부르크 산크트-페테르부르크 산크트페테르부르크 상트 페테르부르크 상트-페테르부르크 상트페테르부르그 상트페트르부르크 성 페테르부르크 성 페테스부르크 싼크뜨 뻬쩨르부르그 싼크뜨-뻬쩨르부르그 싼크뜨뻬쩨르부르그 페테르부르크 페트로그라드"],["RU.69","스몰렌스크주","Smolensk Oblast","스몰렌스카야주 스몰렌스크 주 스몰렌스키나"],["RU.71","스베르들롭스크주","Sverdlovsk Oblast","러시아 스베르들롭스크주 스베르들로프스크 주 스베르들롭스크 주 스웨르들롭스크 주 스웨르들롭스크주"],["RU.70","스타브로폴 지방","Stavropol Kray","스따브로뽈 변강 스타브로폴 크라이 스타브로폴지방 쓰따브로뽈 변강"],["RU.01","아디게야 공화국","Adygeya Republic","아디게야 아디게야공화국 아디게예"],["RU.06","아르한겔스크주","Arkhangelskaya","아르한겔스크 주 아르항겔스크 주"],["RU.05","아무르주","Amur Oblast","아무르 아무르 주 아무르 크라이 아무르스카야주 흑룡주"],["RU.07","아스트라한주","Astrakhan Oblast","아스트라한 주"],["RU.03","알타이 공화국","Altai","알따이 공화국 알타이공화국"],["RU.04","알타이 변경주","Altai Krai","알따이 변강 알타이 알타이 지방 알타이 크라이 알타이지방"],["RU.88","야로슬라블주","Yaroslavl Oblast","야로슬라브주 야로슬라블 주 야로슬라프주"],["RU.87","야말로네네츠 자치구","Yamalo-Nenets","YNAO 야말네네츠 자치구 야말로 네네츠 자치구 야말로네네츠자치구 야말리아"],["RU.55","오렌부르크주","Orenburg Oblast","오렌부르크 주"],["RU.56","오룔주","Oryol oblast","오렐 주 오룔 주"],["RU.54","옴스크주","Omsk Oblast","옴스크 옴스크 주"],["RU.80","우드무르티야 공화국","Udmurtiya Republic","우드무르찌야 공화국 우드무르트 우드무르트 공화국 우드무르트공화국 우드무르티야"],["RU.81","울리야놉스크주","Ulyanovsk","울랴노프스크 주 울리야노프스크 주 울리야놉스크 울리야놉스크 주"],["RU.89","유대인 자치주","Jewish Autonomous Oblast","JAO 유대인 유대인자치주 유태인 자치주 유태인자치주"],["RU.20","이르쿠츠크주","Irkutsk Oblast","이르쿠츠크 주"],["RU.21","이바노보주","Ivanovo Oblast","이바노보 주"],["RU.19","인구셰티야 공화국","Ingushetiya Republic","인구셰티야 인구시 인구시 공화국 인구시공화국 잉구셰티야 잉구슈 잉구슈 공화국 잉구시 잉구시 공화국 체첸-인구시 ASSR 체첸-잉구쉬 소비에트 사회주의 자치 공화국 체첸-잉구슈 ASSR 체첸-잉구슈 소비에트 사회주의 자치 공화국"],["RU.93","자바이칼 지방","Zabaykalskiy (Transbaikal) Kray","자바이깔 변강 자바이칼스키 자바이칼스키 지방 자바이칼스키 크라이 자바이칼지방"],["RU.12","체첸 공화국","Chechnya","체첸 체첸공화국 체츠냐 체츠냐 공화국 체치냐"],["RU.13","첼랴빈스크주","Chelyabinsk","첼랴빈스크 첼랴빈스크 주"],["RU.16","추바시야 공화국","Chuvash Republic","추바슈 공화국 추바시 공화국 추바시 공화국 - 추바시야 추바시공화국 추바시야"],["RU.15","추코트카 자치구","Chukotka","추코트 자치구 추코트카 추코트카자치구 추콧카 추콧카 자치구 추크치 자치구 축치 축치자치구"],["RU.27","카라차예보체르케시야 공화국","Karachayevo-Cherkesiya Republic","카라차예보 체르케스카야 카라차예보-체르케스카야 카라차예보체르케스카야 카라차예보체르케스카야 공화국 카라차예보체르케스카야공화국 카라차예보체르케시야 카라차이 체르케시야 카라차이-체르케스 공화국 카라차이-체르케시야 카라차이체르케시야 카라카이체르케스시아"],["RU.28","카렐리야 공화국","Karelia","까렐리야 공화국 동카르얄라 카렐리아 공화국 카렐리야공화국 카르얄라 공화국"],["RU.22","카바르디노발카리야 공화국","Kabardino-Balkariya Republic","카바르디노 발카르 카바르디노-발카르 카바르디노-발카르 공화국 카바르디노발카르 카바르디노발카르 공화국 카바르디노발카르공화국 카바르디노발카리야"],["RU.25","칼루가주","Kaluga Oblast","칼루가 칼루가 주"],["RU.23","칼리닌그라드주","Kaliningrad Oblast","칼리닌그라드 주"],["RU.24","칼미키야 공화국","Kalmykiya Republic","깔믜끼야 깔믜끼야 공화국 칼미크 칼미크 공화국 칼미크공화국 칼미키야"],["RU.92","캄차카 변경주","Kamchatka","깜챠뜨까 변강 캄차카 지방 캄차카 크라이 캄차카지방"],["RU.29","케메로보주","Kuzbass","케메로보 주 케메로보스카야주 케메로보주 - 쿠즈바스 쿠즈바스"],["RU.34","코미 공화국","Komi","꼬미 공화국 코미공화국"],["RU.37","코스트로마주","Kostroma Oblast","코스트로마 주"],["RU.40","쿠르간주","Kurgan Oblast","쿠르간 주"],["RU.41","쿠르스크주","Kursk Oblast","쿠르스크 주"],["RU.38","크라스노다르 변경주","Krasnodar Krai","크라스노다르 변강 크라스노다르 지방 크라스노다르 크라이 크라스노다르지방"],["RU.91","크라스노야르스크 지방","Krasnoyarsk Krai","크라스노야르스크 변강 크라스노야르스크 크라이 크라스노야르스크지방"],["RU.33","키로프주","Kirov Oblast","키로프 키로프 주 키로프스카야주"],["RU.73","타타르스탄 공화국","Tatarstan Republic","따따르스딴 따따르스딴 공화국 타타르 타타르 공화국 타타르 공화국의 역사 타타르공화국 타타르스탄 타타르스탄공화국"],["RU.72","탐보프주","Tambov Oblast","탐보프 주"],["RU.75","톰스크주","Tomsk Oblast","톰스크 주"],["RU.79","투바 공화국","Republic of Tyva","띄와 공화국 타누 공화국 타누투빈 인민공화국 투바공화국 트바 공화국"],["RU.76","툴라주","Tula Oblast","뚤라 주 뚤라주 툴라 툴라 주 툴스카야 오블라스티"],["RU.78","튜멘주","Tyumen Oblast","튜멘 주"],["RU.77","트베리주","Tver Oblast","칼리닌 주 칼리닌주 트베르 주 트베리 주 트베리스카야주"],["RU.90","페름 변경주","Perm Krai","뻬름 변강 페름 페름 지방 페름 크라이 페름지방"],["RU.57","펜자주","Penza Oblast","펜자 펜자 주"],["RU.59","프리모르스키 변경주","Primorye","연해 변강 연해 변경주 연해 지방 연해변강 연해변경주 연해주 연해지방 프리모르스키 프리모르스키 지방 프리모르스키 크라이 프리모르스키지방 프리모르스키크라이 프리모리예"],["RU.60","프스코프주","Pskov Oblast","프스코프 프스코프 주"],["RU.30","하바롭스크 변경주","Khabarovsk","하바로프스크 변경주 하바로프스크 크라이 하바롭스크 하바롭스크 변강 하바롭스크 지방 하바롭스크 크라이 하바롭스크지방"],["RU.31","하카시야 공화국","Khakasiya Republic","하카스 하카스 공화국 하카스공화국 하카시아 하카시아 공화국 하카시야"],["RU.32","한티만시 자치구","Khanty-Mansia","KMAO 한티-만시 자치구 한티만시스크 자치구 - 우그라 한티만시자치구"]],"말레이시아":[["MY.05","느그리슴빌란주","Negeri Sembilan","네게리 셈빌란 네게리 셈빌란 주 네게리셈빌란 네게리셈빌란 주 네게리셈빌란주 느그리 슴빌란 주 느그리슴빌란 느그리슴빌란 주"],["MY.15","라부안","Labuan","라부안 섬 라부안섬"],["MY.04","믈라카주","Melaka","말라카 주 말라카주 멜라카 주 멜라카주 믈라카 주"],["MY.11","사라왁주","Sarawak","사라와크 사라와크 주 사라와크주 사라왁 사라왁 주"],["MY.16","사바주","Sabah","사바 주"],["MY.12","슬랑오르주","Selangor","셀랑고르 셀랑고르 주 셀랑고르주 셀랑오르 셀랑오르 주 셀랑오르주 슬랑고르 슬랑고르 주 슬랑고르 주, 셀랑고르 주 슬랑고르주 슬랑오르 슬랑오르 주"],["MY.01","조호르주","Johor","조호르 조호르 주"],["MY.14","쿠알라룸푸르","Kuala Lumpur",""],["MY.02","크다주","Kedah","케다 케다 주 케다주 크다 크다 주"],["MY.03","클란탄주","Kelantan","켈란탄 켈란탄 주 켈란탄주 클란탄 클란탄 주"],["MY.13","트렝가누주","Terengganu","테렝가누 테렝가누 주 테렝가누주 트렝가누 트렝가누 주"],["MY.06","파항주","Pahang","파항 파항 주"],["MY.07","페락주","Perak","페라크 페라크 주 페라크주 페락 페락 주"],["MY.17","푸트라자야","Putrajaya","푸투르자야 푸트라자여 푸트루자야 푸트르자야 푸트르자여 프트르자야"],["MY.08","프를리스주","Perlis","퍼를리스 퍼를리스 주 펄리스 주 페를리스 페를리스 주 페를리스주 프를리스 프를리스 주"],["MY.09","피낭주","Penang","페낭 페낭 주 풀라우 피낭 주 풀라우피낭 풀라우피낭 주 풀라우피낭주 피낭 피낭 주"]],"멕시코":[["MX.12","게레로주","Guerrero","게레로 주"],["MX.11","과나후아토주","Guanajuato","과나화토 주 과나후아토 주"],["MX.18","나야리트주","Nayarit","나야리트 나야리트 주"],["MX.19","누에보레온주","Nuevo León","누에보 레온 누에보 레온 주 누에보레온 누에보레온 주 Nuevo Leon"],["MX.10","두랑고주","Durango","두랑고 주"],["MX.09","멕시코시티","Mexico City","메히꼬 시 메히꼬 시티 메히꼬 씨티 메히꼬시 메히꼬시티 메히꼬씨티 메히코 시 메히코 시티 메히코시 메히코시티 멕시코 시 멕시코 시티 멕시코 연방구 멕시코시 시우다드 데 메히코 시우다드 데 멕시코 시우다드데메히코 시우다드데멕시코"],["MX.15","멕시코주","México","메히코 주 메히코주 멕시코 주 Mexico"],["MX.17","모렐로스주","Morelos","모렐로스 모렐로스 주"],["MX.16","미초아칸주","Michoacán","미초아칸 미초아칸 주 Michoacan"],["MX.03","바하칼리포르니아수르주","Baja California Sur","바하 칼리포르니아 수르 바하 칼리포르니아 수르 주 바하칼리포르니아수르 바하칼리포르니아수르 주"],["MX.02","바하칼리포르니아주","Baja California","바하 칼리포르니아 주 바하 캘리포니아 바하칼리포르니아 바하칼리포르니아 주 바하칼리포르니아노르테 바하칼리포르니아노르테 주 바하캘리포니아 바하캘리포니아 주 하가주"],["MX.30","베라크루스주","Veracruz","베라크루스 주"],["MX.32","사카테카스주","Zacatecas","사카테카스 주 자카테카스"],["MX.24","산루이스포토시주","San Luis Potosí","산 루이스 포토시 주 산루이스포토시 주 San Luis Potosi"],["MX.26","소노라주","Sonora","소노라 소노라 주"],["MX.25","시날로아주","Sinaloa","시날로아 시날로아 주"],["MX.01","아과스칼리엔테스주","Aguascalientes","아과스칼리엔테스 주"],["MX.20","오아하카주","Oaxaca","오아하카 주 오악사카 주 오악사카주 와하카 주 와하카주"],["MX.31","유카탄주","Yucatán","유카탄 주 Yucatan"],["MX.13","이달고주","Hidalgo","이달고 주"],["MX.05","치아파스주","Chiapas","치아파스 치아파스 주"],["MX.06","치와와주","Chihuahua","치와와 주"],["MX.04","캄페체주","Campeche","캄페체 주"],["MX.22","케레타로주","Querétaro","케레타로 주 Queretaro"],["MX.07","코아우일라주","Coahuila","코아우일라 코아우일라 주"],["MX.08","콜리마주","Colima","콜리마 주"],["MX.23","킨타나로오주","Quintana Roo","킨타나 로오 킨타나 로오 주 킨타나로오 킨타나로오 주"],["MX.28","타마울리파스주","Tamaulipas","타마울리파스 타마울리파스 주"],["MX.27","타바스코주","Tabasco","타바스코 타바스코 주"],["MX.29","틀락스칼라주","Tlaxcala","틀락스칼라 주"],["MX.21","푸에블라주","Puebla","푸에블라 주"],["MX.14","할리스코주","Jalisco","할리스코 할리스코 주"]],"미국":[["US.NV","네바다주","Nevada","내바다 내바다 주 네바다 네바다 주"],["US.NE","네브래스카주","Nebraska","Nebraska 내브래스카 주 내브래스카주 네바라스카 네브라스카 네브라스카 주 네브라스카주 네브래스카 네브래스카 주 네브래스커 주 네브래스커주"],["US.ND","노스다코타주","North Dakota","노스 다코다 노스 다코타 노스 다코타 주 노스 다코타주 노스다코다 노스다코타 노스다코타 주"],["US.NC","노스캐롤라이나주","North Carolina","노스 캐럴라이나 노스 캐럴라이나 주 노스 캐롤라이나 노스 캐롤라이나 주 노스 캐롤라이나주 노스캐럴라이나 노스캐럴라이나 주 노스캐럴라이나주 노스캐롤라이나 노스캐롤라이나 주 노스캐롤리나"],["US.NM","뉴멕시코주","New Mexico","뉴 멕시코 뉴 멕시코 주 뉴 멕시코주 뉴맥시코 주 뉴멕시코 뉴멕시코 주"],["US.NY","뉴욕주","New York","뉴 욕 주 뉴요크 주 뉴욕 주 뉴우요크 주 뉴우요크주"],["US.NJ","뉴저지주","New Jersey","뉴 저지 뉴 저지 주 뉴저지 뉴저지 주 뉴져시 뉴져시 주 뉴져시주"],["US.NH","뉴햄프셔주","New Hampshire","뉴 햄프셔 뉴 햄프셔 주 뉴햄프셔 뉴햄프셔 주"],["US.DE","델라웨어주","Delaware","델라웨어 델라웨어 주 델러웨어"],["US.RI","로드아일랜드주","Rhode Island","로드 아일랜드 로드 아일랜드 주 로드아일랜드 로드아일랜드 주"],["US.LA","루이지애나주","Louisiana","루이지아나 루이지아나 주 루이지아나주 루이지애나 루이지애나 주"],["US.MA","매사추세츠주","Massachusetts","마사츄세쯔 마사츄세쯔 주 마싸츄세쯔 마싸츄세쯔 주 마싸츄세쯔주 매사추새츠 주 매사추세추 주 매사추세츠 매사추세츠 주 매사츄세츠 매서추세츠 주 메사추세츠 메사추세츠 주 메사추세츠주"],["US.MD","메릴랜드주","Maryland","매릴랜드 매릴랜드 주 매릴랜드주 맬리랜드 맬리랜드주 메릴랜드 메릴랜드 주"],["US.ME","메인주","Maine","메인 주"],["US.MT","몬태나주","Montana","몬타나 몬타나 주 몬타나주 몬태나 몬태나 주"],["US.MN","미네소타주","Minnesota","미국 미네소타 주 미네소타 미네소타 주"],["US.MI","미시간주","Michigan","미시간 미시간 주 미시건 미시건 주 미시건주"],["US.MS","미시시피주","Mississippi","미시시피 미시시피 주 미씨시피 미씨시피 주"],["US.MO","미주리주","Missouri","미주리 미주리 주"],["US.VT","버몬트주","Vermont","버몬트 버몬트 주"],["US.VA","버지니아주","Virginia","버지니아 버지니아 주"],["US.SD","사우스다코타주","South Dakota","남다코타 남다코타주 사우스 다코타 사우스 다코타 주 사우스다코타 사우스다코타 주"],["US.SC","사우스캐롤라이나주","South Carolina","사우스 캐럴라이나 사우스 캐럴라이나 주 사우스 캐롤라이나 사우스 캐롤라이나 주 사우스캐럴라이나 사우스캐럴라이나 주 사우스캐롤라이나 사우스캐롤라이나 주"],["US.ID","아이다호주","Idaho","아이다호 아이다호 주"],["US.IA","아이오와주","Iowa","아이오와 아이오와 주"],["US.AR","아칸소주","Arkansas","아르칸사스 아르칸새스 아칸사스 아칸사스 주 아칸소 아칸소 주 알칸사스 알칸새스"],["US.AK","알래스카주","Alaska","알라스카 알라스카 주 알라스카주 알래스카 알래스카 주 알레스카 알레스카 주 알레스카주"],["US.AZ","애리조나주","Arizona","아리조나 아리조나 주 아리조나주 애리조나 애리조나 주"],["US.AL","앨라배마주","Alabama","알라바마 알라바마 주 알라바마주 알라배마 알라배마 주 알라배마주 앨라바마 앨라바마 주 앨라바마주 앨라배마 앨라배마 주 앨러바마 앨러바마 주 앨러배마 앨러배마 주 앨러배마주"],["US.OR","오리건주","Oregon","오레건 오레건 주 오레건주 오레곤 오레곤 주 오레곤주 오리건 오리건 주 오리곤 오리곤 주 오리곤주"],["US.OK","오클라호마주","Oklahoma","오클라호마 오클라호마 주"],["US.OH","오하이오주","Ohio","오하이오 오하이오 주 오히오 오히오 주 오히오주"],["US.WY","와이오밍주","Wyoming","와이오밍 와이오밍 주"],["US.WA","워싱턴주","Washington","워싱턴 주 워싱튼 주"],["US.WV","웨스트버지니아주","West Virginia","웨스트 버지니아 웨스트 버지니아 주 웨스트버지니아 웨스트버지니아 주"],["US.WI","위스콘신주","Wisconsin","위스컨신 위스컨신 주 위스컨신주 위스콘신 위스콘신 주"],["US.UT","유타주","Utah","유타 유타 주"],["US.IN","인디애나주","Indiana","인디아나 인디아나 주 인디아나주 인디애나 인디애나 주"],["US.IL","일리노이주","Illinois","일리노이 일리노이 주 일리노이스 일리노이스 주"],["US.GA","조지아주","Georgia","미국 조지아 조지아 조지아 주 죠지아 주 죠지아주"],["US.KS","캔자스주","Kansas","칸사스주 캔사스 캔사스 주 캔사스주 캔자스 캔자스 주 캔저스 캔저스 주 캔저스주"],["US.CA","캘리포니아주","California","가주 칼리포니아 칼리포니아 주 칼리포니아주 캘리포니아 캘리포니아 주 캘리포니어 캘리포니어 주 캘리포니어주 켈리포니아"],["US.DC","컬럼비아 특별구","District of Columbia","컬럼비아특별구"],["US.KY","켄터키주","Kentucky","켄터키 켄터키 주"],["US.CT","코네티컷주","Connecticut","커네티컷 커네티컷 주 커네티컷주 커넥티컷 커넥티컷 주 커넥티컷주 코네티컷 코네티컷 주 코넥티커트 주 코넥티커트주 코넥티컷 코넥티컷 주 코넥티컷주 콘넥티커트 콘넥티커트 주 콘넥티커트주"],["US.CO","콜로라도주","Colorado","콜로라도 콜로라도 주"],["US.TN","테네시주","Tennessee","테네시 테네시 주 테니시 주 테니시주"],["US.TX","텍사스주","Texas","테하스 테하스 주 테하스주 텍사스 텍사스 주"],["US.PA","펜실베이니아주","Pennsylvania","펜실바니아 펜실바니아 주 펜실바니아주 펜실배니아 펜실배니아 주 펜실배니아주 펜실베니아 펜실베니아 주 펜실베니아주 펜실베이니아 펜실베이니아 주"],["US.FL","플로리다주","Florida","사우스플로리다 플로 리다 플로리다 플로리다 주 플로리더"],["US.HI","하와이주","Hawaii","미국 하와이 주 하와이 하와이 주"]],"베트남":[["VN.96","까마우","Ca Mau",""],["VN.04","까오방성","Cao Bằng Province","까오방 성 Cao Bang Province"],["VN.92","껀터","Can Tho City",""],["VN.22","꽝닌성","Quảng Ninh","꽝닌 성 꽝닌 시 꽝닌시 Quang Ninh"],["VN.51","꽝응아이성","Quang Ngai",""],["VN.44","꽝찌성","Quang Tri",""],["VN.37","닌빈성","Ninh Binh",""],["VN.48","다낭","Da Nang City",""],["VN.66","닥락성","Dak Lak",""],["VN.75","동나이시","Dong Nai",""],["VN.82","동탑성","Dong Thap",""],["VN.11","디엔비엔성","Điện Biên Province","디엔비엔 성 GJien Bien Province"],["VN.80","떠이닌성","Tay Ninh",""],["VN.08","뚜옌꽝성","Tuyen Quang",""],["VN.15","라오까이성","Lao Cai",""],["VN.12","라이쩌우성","Lai Châu Province","라이쩌우 성 Lai Chau Province"],["VN.20","랑선성","Lạng Sơn Province","랑선 랑선 성 Lang Son Province"],["VN.68","럼동성","Lam Dong",""],["VN.24","박닌","Bac Ninh",""],["VN.86","빈롱성","Vinh Long",""],["VN.14","선라성","Sơn La Province","선라 선라 성 Son La Province"],["VN.91","안장성","An Giang",""],["VN.40","응에안성","Nghệ An Province","응에안 응에안 성 Nghe An Province"],["VN.52","잘라이성","Gia Lai",""],["VN.56","카인호아성","Khanh Hoa",""],["VN.19","타이응우옌성","Thai Nguyen",""],["VN.38","타인호아성","Thanh Hóa Province","타니호아 성 타인호아 성 타인화성 탄호아성 Thanh Hoa Province"],["VN.25","푸토성","Phu Tho",""],["VN.01","하노이","Hanoi",""],["VN.42","하띤성","Hà Tĩnh Province","하띤 성 Ha Tinh Province"],["VN.31","하이퐁","Hai Phong",""],["VN.79","호찌민시","Ho Chi Minh City (HCMC)",""],["VN.46","후에","Thừa Thiên Huế Province","투아티엔후에 성 투아티엔후에성 트어티엔후에 성 트어티엔후에성 후에 기념물 집중지대 후에 시 후에시 훼 Thua Thien Hue Province"],["VN.33","흥옌성","Hưng Yên Province","Hung Yen Province"]],"벨기에":[["BE.BRU","브뤼셀","Brussels Capital","브뤼설 브뤼셀 수도 지역 브뤼셀 수도권 지역 브뤼셀 수도지역 브류쎌"],["BE.WAL","왈롱","Wallonia","왈로니 왈로니아 왈론 왈론 지역 왈롱 지역 왈룡 우알로니"],["BE.VLG","플란데런","Flanders","플라망 플란더런 플란더스 플란더즈 플람스 플랑드르 플랜더스 플랜더즈"]],"브라질":[["BR.29","고이아스주","Goiás","고이아스 주 Goias"],["BR.21","리우데자네이루주","Rio de Janeiro","리우 데 자네이루 주 리우데자네이루 주 히우 데 자네이루 주 히우 드 자네이루 주 히우 지 자네이루 주 히우데자네이루 주 히우드자네이루 주 히우드자네이루주 히우지자네이루 주 히우지자네이루주"],["BR.13","마라냥주","Maranhão","마라냥 마라냥 주 Maranhao"],["BR.11","마투그로수두술주","Mato Grosso do Sul","마투 그로수 두 술 마투 그로수 두 술 주 마투그로수두술 마투그로수두술 주"],["BR.14","마투그로수주","Mato Grosso","마투 그로수 마투 그로수 주 마투그로수 마투그로수 주"],["BR.15","미나스제라이스주","Minas Gerais","미나스 제라이스 미나스 제라이스 주 미나스제라이스 미나스제라이스 주"],["BR.05","바이아주","Bahia","바이아 바이아 주 바히아주"],["BR.26","산타카타리나주","Santa Catarina","산타 카타리나 주 산타카타리나 주"],["BR.27","상파울루주","São Paulo","상 파울루 주 상파울로 주 상파울루 주 Sao Paulo"],["BR.28","세르지피주","Sergipe","세르지프 주 세르지피 세르지피 주"],["BR.06","세아라주","Ceará","세아라 세아라 주 Ceara"],["BR.04","아마조나스주","Amazonas","아마소나스 주 아마조나스 주"],["BR.03","아마파주","Amapá","아마파 아마파 주 Amapa"],["BR.01","아크리주","Acre","아크레 주 아크레주 아크르 주 아크리 아크리 주"],["BR.02","알라고아스주","Alagoas","알라고아스 알라고아스 주"],["BR.07","연방구","Federal District","DF Distrito Federal 브라질 연방구"],["BR.08","이스피리투산투주","Espírito Santo","에스피리투산투 에스피리투산투 주 에스피리투산투주 이스피리투 산투 주 이스피리투산투 이스피리투산투 주 Espirito Santo"],["BR.31","토칸칭스주","Tocantins","토칸칭스 토칸칭스 주 토칸팅스 주"],["BR.18","파라나주","Paraná","Parana"],["BR.17","파라이바주","Paraíba","파라이바 파라이바 주 Paraiba"],["BR.16","파라주","Pará","Para"],["BR.30","페르남부쿠주","Pernambuco","페르남부쿠 페르남부쿠 주"],["BR.20","피아우이주","Piauí","피아우이 피아우이 주 Piaui"],["BR.25","호라이마주","Roraima","로라이마 로라이마 주 로라이마주 호라이마 호라이마 주"],["BR.24","혼도니아주","Rondônia","혼도니아 혼도니아 주 Rondonia"],["BR.22","히우그란지두노르치주","Rio Grande do Norte","히우 그란드 두 노르트 히우 그란드 두 노르트 주 히우 그란지 두 노르치 히우 그란지 두 노르치 주 히우그란드두노르트 히우그란드두노르트 주 히우그란지두노르치 히우그란지두노르치 주"],["BR.23","히우그란지두술주","Rio Grande do Sul","리우그란데두술 주 히우 그란드 두 술 히우 그란드 두 술 주 히우 그란지 두 술 히우 그란지 두 술 주 히우그란드두술 히우그란드두술 주 히우그란지두술 히우그란지두술 주"]],"스웨덴":[["SE.05","고틀란드주","Gotland","고틀란드 주"],["SE.14","노르보텐주","Norrbotten","노르보텐 주"],["SE.10","달라르나주","Dalarna","달라르나 주 코파르베리 주"],["SE.22","베름란드주","Värmland","베름란드 주 Vaermland"],["SE.24","베스테르노를란드주","Västernorrland","베스테르노를란드 주 Vaesternorrland"],["SE.23","베스테르보텐주","Västerbotten","베스테르보텐 주 Vaesterbotten"],["SE.28","베스트라예탈란드주","Västra Götaland","베스트라 예탈란드 주 베스트라예탈란드 주 Vaestra Goetaland"],["SE.25","베스트만란드주","Västmanland","베스트만란드 주 Vaestmanland"],["SE.02","블레킹에주","Blekinge","블레킹에 주"],["SE.18","쇠데르만란드주","Södermanland","쇠데르만란드 주 Soedermanland"],["SE.27","스코네주","Skåne","스코네 주 Skane"],["SE.26","스톡홀름주","Stockholm","스톡홀름 주"],["SE.03","예블레보리주","Gävleborg","예블레보리 주 Gaevleborg"],["SE.08","옌셰핑주","Jönköping","옌셰핑 주 Joenkoeping"],["SE.07","옘틀란드주","Jämtland","옘틀란드 주 Jaemtland"],["SE.15","외레브로주","Örebro","Örebro län 외레브로 주 OErebro"],["SE.16","외스테르예틀란드주","Östergötland","외스테르예틀란드 주 OEstergoetland"],["SE.21","웁살라주","Uppsala","우프살라 주 웁살라 주"],["SE.09","칼마르주","Kalmar","칼마르 주"],["SE.12","크로노베리주","Kronoberg","크로노베리 주"],["SE.06","할란드주","Halland","할란드 주"]],"스위스":[["CH.GR","그라우뷘덴주","Grisons","그라우뷘덴 그라우뷘덴 주 그리송주 그리종주"],["CH.GL","글라루스주","Glarus","글라루스 주"],["CH.NE","뇌샤텔주","Neuchâtel","노이샤텔 주 뇌샤텔 주 Neuchatel"],["CH.NW","니트발덴주","Nidwalden","니드발덴 니드발덴 주 니드발덴주 니트발덴 니트발덴 주"],["CH.LU","루체른주","Lucerne","루체른 주"],["CH.BL","바젤란트주","Basel-Landschaft","바젤 란트 주 바젤란트 바젤란트 주"],["CH.BS","바젤슈타트주","Basel-City","바젤 슈타트 주 바젤슈타트 바젤슈타트 주"],["CH.VS","발레주","Valais","발레 주"],["CH.BE","베른주","Bern","베른 주"],["CH.VD","보주","Vaud","보 주"],["CH.SH","샤프하우젠주","Schaffhausen","샤프하우젠 주"],["CH.SZ","슈비츠주","Schwyz","슈비츠 주"],["CH.AG","아르가우주","Aargau","아르가우 아르가우 주"],["CH.AR","아펜첼아우서로덴주","Appenzell Ausserrhoden","아펜첼 아우서로덴 주 아펜첼 아우서로덴주 아펜첼아우서로덴 아펜첼아우서로덴 주"],["CH.AI","아펜첼이너로덴주","Appenzell Innerrhoden","아펜첼 이너로덴 주 아펜첼이너로덴 아펜첼이너로덴 주"],["CH.OW","옵발덴주","Obwalden","오브발덴 오브발덴 주 오브발덴주 옵발덴 옵발덴 주"],["CH.UR","우리주","Uri","우리 주"],["CH.SG","장크트갈렌주","Saint Gallen","상 갈렌 장크트 갈렌 주 장크트갈렌 주"],["CH.GE","제네바주","Geneva","제네바 주"],["CH.SO","졸로투른주","Solothurn","솔로투른 주 솔로투른주 졸로투른 주"],["CH.JU","쥐라주","Jura",""],["CH.ZG","추크주","Zug",""],["CH.ZH","취리히주","Zurich","취리히 주"],["CH.TG","투르가우주","Thurgau","투르가우 투르가우 주"],["CH.TI","티치노주","Ticino","티치노 티치노 주"],["CH.FR","프리부르주","Fribourg","프리부르 주"]],"스페인":[["ES.58","갈리시아 지방","Galicia","갈리시아 갈리시아지방"],["ES.32","나바라 지방","Navarre","나바라 나바라 도 나바라 주 나바라도 나바라지방 나바르"],["ES.27","라리오하 지방","La Rioja","라 리오하 지방 라리오하 도 라리오하도 라리오하지방"],["ES.29","마드리드 지방","Madrid","마드리드 도 마드리드 주 마드리드도 마드리드지방"],["ES.ML","멜리야","Melilla","루사디르"],["ES.31","무르시아 지방","Murcia","무르시아 도 무르시아 주 무르시아도 무르시아지방"],["ES.59","바스크 지방","Basque Country","바스크지방"],["ES.07","발레아레스 제도","Balearic Islands",""],["ES.60","발렌시아주","Valencia","발렌시아 발렌시아 공동체 발렌시아 지방 발렌시아지방"],["ES.CE","세우타","Ceuta","사브타"],["ES.52","아라곤주","Aragon","아라곤 아라곤 주 아라곤 지방 아라곤지방"],["ES.34","아스투리아스 지방","Asturias","아스투리아스 도 아스투리아스 주 아스투리아스도 아스투리아스지방"],["ES.51","안달루시아주","Andalusia","안달루시아 안달루시아 지방 안달루시아지방"],["ES.57","에스트레마두라 지방","Extremadura","에스트레마두라 에스트레마두라주 에스트레마두라지방 엑스트레마두라 엑스트레마두라 지방"],["ES.53","카나리아 제도","Canary Islands","까나리 제도 까나리아 제도 까나리아제도 인술라 카나리아 카나리 제도 카나리아 카나리아 군도 카나리아제도"],["ES.54","카스티야라만차 지방","Castille-La Mancha","카스티야 라 만차 지방 카스티야라만차 카스티야라만차지방"],["ES.55","카스티야이레온 지방","Castille and León","카스티야 레온 지방 카스티야 이 레온 주 카스티야 이 레온 지방 카스티야레온 카스티야레온 지방 카스티야이레온 카스티야이레온 주 카스티야이레온지방 Castille and Leon"],["ES.56","카탈루냐","Catalonia","까딸로니아 까딸루냐 까딸루냐 지방 까탈루냐 카탈로니아 카탈루냐 자치공동체 카탈루냐 지방 카탈루냐주 카탈루니아"],["ES.39","칸타브리아 지방","Cantabria","칸타브리아 칸타브리아 도 칸타브리아 주 칸타브리아도 칸타브리아지방"]],"싱가포르":[],"아르헨티나":[["AR.07","Buenos Aires F.D.","Buenos Aires F.D.",""],["AR.15","네우켄주","Neuquen","네우켄 주"],["AR.12","라리오하주","La Rioja",""],["AR.11","라팜파주","La Pampa","라 팜파 주 라팜파 라팜파 주"],["AR.16","리오네그로주","Rio Negro",""],["AR.13","멘도사주","Mendoza","멘도사 주"],["AR.14","미시오네스주","Misiones",""],["AR.01","부에노스아이레스주","Buenos Aires","부에노스 아이레스 주 부에노스아이레스 주"],["AR.19","산루이스주","San Luis","산 루이스 주 산루이스 주"],["AR.20","산타크루스주","Santa Cruz",""],["AR.21","산타페주","Santa Fe","산타 페 주 산타페 주"],["AR.22","산티아고델에스테로주","Santiago del Estero","산티아고 델 에스테로 주 산티아고델에스테로 주"],["AR.18","산후안주","San Juan",""],["AR.17","살타주","Salta","살타 주"],["AR.08","엔트레리오스주","Entre Rios","엔트레 리오스 주 엔트레리오스 엔트레리오스 주"],["AR.03","차코주","Chaco","차코 주"],["AR.04","추부트주","Chubut","추부트 추부트 주"],["AR.02","카타마르카주","Catamarca","카타마르카 주"],["AR.05","코르도바주","Cordoba",""],["AR.06","코리엔테스주","Corrientes","코리엔테스 주"],["AR.24","투쿠만주","Tucuman","투쿠만 투쿠만 주"],["AR.23","티에라델푸에고주","Tierra del Fuego","티에라 델 푸에고 주 티에라델푸에고 주"],["AR.09","포르모사주","Formosa","포르모사 주"],["AR.10","후후이주","Jujuy","후후이 주"]],"영국":[["GB.NIR","북아일랜드","Northern Ireland","노던 아일랜드 노던아일랜드 북 아일랜드"],["GB.SCT","스코틀랜드","Scotland","사객란 스코트랜드 스코틀 랜드 스코틀란드 스콧랜드"],["GB.WLS","웨일스","Wales","웨일즈 컴리"],["GB.ENG","잉글랜드","England","대불렬돈 영격란 영길리 영란 잉글런드"]],"오스트리아":[["AT.03","니더외스터라이히주","Lower Austria","니더외스터라이히 니더외스터라이히 주"],["AT.01","부르겐란트주","Burgenland","부르겐란트 부르겐란트 주"],["AT.09","빈","Vienna",""],["AT.06","슈타이어마르크주","Styria","슈타이어마르크 슈타이어마르크 주 스티리아"],["AT.04","오버외스터라이히주","Upper Austria","오버외스터라이히 오버외스터라이히 주"],["AT.05","잘츠부르크주","Salzburg","잘츠부르크 주"],["AT.02","케른텐주","Carinthia","카린시아 카린티아 케른텐 케른텐 주"],["AT.07","티롤주","Tyrol","티롤 주"],["AT.08","포어아를베르크주","Vorarlberg","포어아를베르크 포어아를베르크 주"]],"이탈리아":[["IT.07","라치오주","Lazio","라치오 라치오 주"],["IT.09","롬바르디아주","Lombardy","롬바디 주 롬바르디아 롬바르디아 주 롬바르디아 평원 롬바르디아평원"],["IT.08","리구리아주","Liguria","리구리아 리구리아 주"],["IT.10","마르케주","The Marches","레마르케 주 마르케 주"],["IT.11","몰리세주","Molise","몰리세 몰리세 주"],["IT.02","바실리카타주","Basilicate","바실리카타 바실리카타 주"],["IT.19","발레다오스타주","Aosta Valley","발레 다오스타 주 발레다오스타 발레다오스타 주 아오스타 계곡 아오스타 도 아오스타 현 아오스타도 아오스타현"],["IT.20","베네토주","Veneto","Veneto 베네토 베네토 주 베네티아"],["IT.14","사르데냐","Sardinia","사디니아 사르데냐 섬 사르데냐 주 사르데냐섬 사르데냐주 사르디니아 사르디니아 섬 사르디니아 주 사르디니아섬 사르디니아주 싸르데냐"],["IT.15","시칠리아","Sicily","시실리 시칠리 시칠리아 주 시칠리아주 시켈리아 씨칠리아"],["IT.01","아브루초주","Abruzzo","아브루초 아브루초 주 아브루초몰리세 아브루치 아브루치 주"],["IT.05","에밀리아로마냐주","Emilia-Romagna","에밀리아 로마냐 주 에밀리아 로마냐주 에밀리아-로마냐 에밀리아-로마냐 주 에밀리아-로마냐 지방 에밀리아로마냐 에밀리아로마냐 주"],["IT.18","움브리아주","Umbria","움브리아 움브리아 주"],["IT.03","칼라브리아주","Calabria","칼라브리아 칼라브리아 반도 칼라브리아 주 칼라브리아반도"],["IT.04","캄파니아주","Campania","캄파니아 캄파니아 주"],["IT.16","토스카나주","Tuscany","토스카나 토스카나 주 투스카니 투스카니 주 투스카니주"],["IT.17","트렌티노알토아디제주","Trentino-Alto Adige","남부 티롤 트렌티노 알토 아디제 주 트렌티노 알토아디제 주 트렌티노 쥐트티롤 주 트렌티노-알토 아디제 트렌티노-알토 아디제 주 트렌티노-알토아디제 주 트렌티노-알토아디졔 주 트렌티노알토아디제 트렌티노알토아디제 자치주 트렌티노알토아디제 주 트렌티노쥐트티롤 주 트렌티노쥐트티롤주"],["IT.13","풀리아주","Apulia","아풀리아 풀리아 풀리아 주"],["IT.06","프리울리베네치아줄리아주","Friuli Venezia Giulia","프리울리 베네치아 줄리아 프리울리 베네치아 줄리아 주 프리울리-베네치아 줄리아 프리울리-베네치아 줄리아 주 프리울리-베네치아 쥴리아 프리울리-베네치아 쥴리아 주 프리울리베네치아 줄리아 프리울리베네치아줄리아 프리울리베네치아줄리아 자치주 프리울리베네치아줄리아 주 프리울리베네치아지울리아 프리울리베네치아지울리아 주"],["IT.12","피에몬테주","Piedmont","피드몬트 주 피에몬테 피에몬테 주 피에몽"]],"인도":[["IN.33","고아주","Goa","고아 주 인도 고아 주"],["IN.09","구자라트주","Gujarat","구자라트 구자라트 주"],["IN.20","나갈랜드주","Nagaland","나가랜드 나가랜드 주 나갈랜드 나갈랜드 주"],["IN.52","다드라 나가르하벨리 다만 디우","Dadra and Nagar Haveli and Daman and Diu",""],["IN.07","델리 연방 수도구역","Delhi",""],["IN.41","라다크","Ladakh",""],["IN.24","라자스탄주","Rajasthan","라자스탄 라자스탄 주"],["IN.14","락샤드위프 제도","Lakshadweep","락샤드위프 락샤드위프제도 래카다이브 제도"],["IN.17","마니푸르주","Manipur","마니푸르 마니푸르 주"],["IN.35","마디아프라데시주","Madhya Pradesh","마디아 프라데시주 마디아프라데시 마디아프라데시 주"],["IN.16","마하라슈트라주","Maharashtra","마하라슈트라 마하라슈트라 주 마하라스트라 마하라시트라"],["IN.18","메갈라야주","Meghalaya","메갈라야 메갈라야 주"],["IN.31","미조람주","Mizoram","미조람 미조람 주"],["IN.34","비하르주","Bihar","비하르 비하르 주"],["IN.28","서벵골주","West Bengal","서벵갈 서벵골 서벵골 주 웨스트 벵골 웨스트벵골 웨스트벵골 주"],["IN.29","시킴주","Sikkim","시킴 시킴 주"],["IN.30","아루나찰프라데시주","Arunachal Pradesh","아루나찰프라데시 아루나찰프라데시 주"],["IN.03","아삼주","Assam","아삼 아삼 주 아샘 주 아샘주 아쌈"],["IN.01","안다만 니코바르 제도","Andaman and Nicobar","안다만니코바르제도"],["IN.02","안드라프라데시주","Andhra Pradesh","안드라 안드라 프라데시주 안드라프라데시 안드라프라데시 주"],["IN.21","오디샤주","Odisha","오디샤 오디샤 주 오리사 오리사 주 오리사주"],["IN.39","우타라칸드주","Uttarakhand","우타라칸드 우타라칸드 주 우타락핸드 우타란찰 우타란찰 주 우타란찰주"],["IN.36","우타르프라데시주","Uttar Pradesh","우타르 프라데시 우타르 프라데시 주 우타르 프라데시주 우타르프라데시 우타르프라데시 주"],["IN.38","자르칸드주","Jharkhand","자르칸드 자르칸드 주"],["IN.12","잠무 카슈미르주","Jammu and Kashmir","잠무 카슈미르 주 잠무카슈미르 주 잠무카슈미르주"],["IN.37","차티스가르주","Chhattisgarh","차티스가르 차티스가르 주"],["IN.05","찬디가르","Chandigarh",""],["IN.19","카르나타카주","Karnataka","카르나타카 카르나타카 주"],["IN.13","케랄라주","Kerala","케랄라 케랄라 주"],["IN.25","타밀나두주","Tamil Nadu","타밀 나두 타밀 나두주 타밀나두 타밀나두 주"],["IN.40","텔랑가나주","Telangana","텔랑가나 텔랑가나 주"],["IN.26","트리푸라주","Tripura","트리푸라 트리푸라 주"],["IN.23","펀자브주","Punjab",""],["IN.22","푸두체리","Puducherry","폰디체리"],["IN.10","하리아나주","Haryana","하리아나 하리아나 주"],["IN.11","히마찰프라데시주","Himachal Pradesh","히마찰 프라데시 히마찰프라데시 히마찰프라데시 주"]],"인도네시아":[["ID.34","고론탈로주","Gorontalo","고론탈로 주"],["ID.PD","남서파푸아주","Southwest Papua",""],["ID.32","남수마트라주","South Sumatra","남수마트라 남수마트라 주 수마테라셀라탄주 수마트라 셀라탄 주 수마트라 슬라탄 주 수마트라셀라탄 주 수마트라슬라탄 주 수마트라슬라탄주"],["ID.38","남술라웨시주","South Sulawesi","남술라웨시 남술라웨시 주 술라웨시 슬라탄 주 술라웨시셀라탄주 술라웨시슬라탄 주 술라웨시슬라탄주"],["ID.12","남칼리만탄주","South Kalimantan","남칼리만탄 남칼리만탄 주 칼리만탄 셀라탄 주 칼리만탄 슬라탄 주 칼리만탄셀라탄 주 칼리만탄셀라탄주 칼리만탄슬라탄 주 칼리만탄슬라탄주"],["ID.PS","남파푸아주","South Papua",""],["ID.22","동남술라웨시주","Southeast Sulawesi","남동술라웨시 주 남동술라웨시주 동남술라웨시 동남술라웨시 주 술라웨시 틍가라 주 술라웨시틍가라 주 술라웨시틍가라주"],["ID.18","동누사틍가라주","East Nusa Tenggara","누사텡가라티무르주 누사틍가라티무르 주 누사틍가라티무르주 동누사틍가라 동누사틍가라 주"],["ID.08","동자와주","East Java","동자바 동자바 주 동자바주 동자와 동자와 주 자와 티무르 주 자와티무르 주 자와티무르주"],["ID.14","동칼리만탄주","East Kalimantan","동가 동칼리만탄 동칼리만탄 주 칼리만탄 티무르 주 칼리만탄티무르 주 칼리만탄티무르주"],["ID.15","람풍주","Lampung","람풍 람풍 주"],["ID.40","리아우 제도주","Riau Islands","리아우 제도 주 리아우제도주 케풀라우안리아우주"],["ID.37","리아우주","Riau","리아우 리아우 주"],["ID.28","말루쿠주","Maluku","말루쿠 주"],["ID.33","반텐주","Banten","반텐 반텐 주 반튼 주"],["ID.02","발리주","Bali","발리 주"],["ID.35","방카벨리퉁주","Bangka–Belitung Islands","방카 벨리퉁 제도 방카 벨리퉁 주 방카벨리퉁 방카벨리퉁 제도 방카벨리퉁 주 방카벨리퉁제도 방카블리퉁 방카블리퉁 제도 Bangka-Belitung Islands"],["ID.29","북말루쿠주","North Maluku","말루쿠 우타라 주 말루쿠우타라 주 말루쿠우타라주 북말루쿠 북말루쿠 주"],["ID.26","북수마트라주","North Sumatra","북 수마트라 북수마트라 북수마트라 주 수마트라 우타라 주 수마트라우타라 주 수마트라우타라주"],["ID.31","북술라웨시주","North Sulawesi","북술라웨시 북술라웨시 주 술라웨시 우타라 주 술라웨시우타라 주 술라웨시우타라주"],["ID.42","북칼리만탄주","North Kalimantan","북부 칼리만탄 주 북칼리만탄 북칼리만탄 주 칼리만탄 우타라 주 칼리만탄우타라 주 칼리만탄우타라주"],["ID.03","븡쿨루주","Bengkulu","벵쿨루 주 벵쿨루주 븡쿨루 주"],["ID.17","서누사틍가라주","West Nusa Tenggara","누사텡가라바라트주 누사틍가라바랏 주 누사틍가라바랏주 서누사틍가라 서누사틍가라 주"],["ID.24","서수마트라주","West Sumatra","서수마트라 서수마트라 주 수마트라 바랏 주 수마트라바랏 주 수마트라바랏주"],["ID.41","서술라웨시주","West Sulawesi","서술라웨시 서술라웨시 주 술라웨시 바랏 주 술라웨시바라트주 술라웨시바랏 주 술라웨시바랏주"],["ID.11","서칼리만탄주","West Kalimantan","서가 서칼리만탄 서칼리만탄 주 칼리만탄 바랏 주 칼리만탄바라트주 칼리만탄바랏 주 칼리만탄바랏주"],["ID.39","서파푸아주","West Papua","서이리안 자야 주 서이리안자야 주 서이리안자야주 서파푸아 주 이리안 자야 바랏 주 이리안자야바랏 주 파푸아 바랏 주 파푸아바랏 파푸아바랏 주 파푸아바랏주"],["ID.01","아체주","Aceh","아체 아체 주"],["ID.10","욕야카르타","Yogyakarta","욕야카르타특별주 욕이카르타 족자카르타 특별주"],["ID.30","자와바랏 주","West Java","서자바 주 서자바주 서자와 서자와 주 자와 바랏 주 자와바라트주 자와바랏주"],["ID.04","자카르타","Jakarta","DKI 자카르타 자카르타 특별수도지역 자카르타 특수지역 자카르타특수주 자카르타특수지역 쟈까르따"],["ID.05","잠비주","Jambi","잠비 주"],["ID.21","중앙술라웨시주","Central Sulawesi","술라웨시 틍아 주 술라웨시텡가주 술라웨시틍아 주 술라웨시틍아주 중부 술라웨시 주 중부술라웨시 주 중부술라웨시주 중앙 술라웨시 주 중앙술라웨시 중앙술라웨시 주"],["ID.07","중앙자와주","Central Java","자와 틍아 주 자와텡가주 자와틍아 주 자와틍아주 중부 자바 주 중부 자와 주 중앙 자바 주 중앙 자와 주 중앙자바 주 중앙자바주 중앙자와 중앙자와 주"],["ID.13","중앙칼리만탄주","Central Kalimantan","중부 칼리만탄 주 중앙 칼리만탄 주 중앙칼리만탄 중앙칼리만탄 주 칼리만탄 틍아 주 칼리만탄텡가주 칼리만탄틍아 주 칼리만탄틍아주"],["ID.PT","중앙파푸아주","Central Papua",""],["ID.PE","파푸아고원주","Highland Papua",""],["ID.36","파푸아주","Papua","이리안 자야 주 이리안자야 주 이리안자야주 파푸아 주"]],"일본":[["JP.17","가가와현","Kagawa","가가와 가가와 현 카가와 카가와 현 카가와현 향천 현 향천현"],["JP.18","가고시마현","Kagoshima","가고시마 현 녹아도현 카고시마 현 카고시마현"],["JP.19","가나가와현","Kanagawa","가나가와 가나가와 현 신나천현 신내천현 카나가와 카나가와 현 카나가와현"],["JP.20","고치현","Kochi","고지 현 고지현 고찌 현 고치 고치 현 코치 현 코치현"],["JP.22","교토부","Kyoto","경도 부 경도부 교또 부 교토 부 쿄토 부 쿄토부"],["JP.21","구마모토현","Kumamoto","구마모도 현 구마모또 현 구마모토 현 웅본현 쿠마모토 현 쿠마모토현"],["JP.10","군마현","Gunma","군마 현"],["JP.09","기후현","Gifu","기부현 기후 현"],["JP.26","나가노현","Nagano","나가노 현 북시나노 신슈 장야현"],["JP.27","나가사키현","Nagasaki","나가사끼 현 나가사키 현"],["JP.28","나라현","Nara","나라 현 나량현 내량현"],["JP.29","니가타현","Niigata","가에쓰 지방 니가타 현 니이가다 현 니이가타 현 니이가타현 니카타 현 신석현"],["JP.42","도야마현","Toyama","도야마 현 부산현 토야마 현 토야마현"],["JP.38","도치기현","Tochigi","도찌기 현 도치기 현 토치기 현 토치기현 회목현"],["JP.40","도쿄도","Tokyo","도꾜 도 도꾜도 도쿄 도쿄 도 동경 동경 23구 동경 도 동경도 토쿄 도 토쿄도"],["JP.39","도쿠시마현","Tokushima","덕도 현 덕도현 도꾸시마 현 도쿠시마 도쿠시마 현 토쿠시마 토쿠시마 현 토쿠시마현"],["JP.41","돗토리현","Tottori","돗또리 현 돗토리 돗토리 현 조취 현 조취현 톳토리 톳토리 현 톳토리현"],["JP.24","미야기현","Miyagi","궁성현 미야기 현"],["JP.25","미야자키현","Miyazaki","궁기현 미야자끼 현 미야자키 현"],["JP.23","미에현","Mie","미에 현 삼중현"],["JP.33","사가현","Saga","사가 현 좌하현"],["JP.34","사이타마현","Saitama","기옥 현 기옥현 사이 타마 현 사이다마 현 사이다마현 사이따마 현 사이타마 현"],["JP.35","시가현","Shiga","시가 현 자하현"],["JP.36","시마네현","Shimane","도근 현 도근현 시마네 시마네 현"],["JP.37","시즈오카현","Shizuoka","시즈오까 현 시즈오카 현 정강현"],["JP.03","아오모리현","Aomori","아오모리 현 청삼 현 청삼현"],["JP.01","아이치현","Aichi","아이찌 현 아이치 아이치 현 애지 현 애지현"],["JP.02","아키타현","Akita","아끼다 현 아끼따 현 아키타 현 추전 현 추전현"],["JP.44","야마가타현","Yamagata","산형현 야마가다 현 야마가따 현 야마가타 현"],["JP.45","야마구치현","Yamaguchi","산구 현 산구현 야마구찌 현 야마구치 현"],["JP.46","야마나시현","Yamanashi","산리현 야마나시 현"],["JP.05","에히메현","Ehime","애원 현 애원현 에히메 에히메 현"],["JP.32","오사카부","Osaka","대판부 오사까 부 오사카 부"],["JP.30","오이타현","Oita","대분현 오이따 현 오이타 현"],["JP.31","오카야마현","Okayama","강산 현 강산현 오까야마 현 오카야마 오카야마 현"],["JP.47","오키나와현","Okinawa","류큐 번 류큐번 오끼나와 오끼나와 현 오키나와 오키나와 현 우치나 충승 충승현"],["JP.43","와카야마현","Wakayama","와까야마 현 와카야마 현 화가산현"],["JP.14","이바라키현","Ibaraki","이바라기 현 이바라기현 이바라키 현 자성현"],["JP.15","이시카와현","Ishikawa","석천현 이시가와 현 이시까와 현 이시카와 현"],["JP.16","이와테현","Iwate","암수현 이와떼 현 이와테 현"],["JP.04","지바현","Chiba","일본 치바현 지바 현 천엽 현 천엽현 치바 현 치바현"],["JP.12","홋카이도","Hokkaido","북해도 호까이 도 호까이도 호까이도오 혹가이 도 혹가이도 혹까이 도 혹까이도 홋까이 도 홋까이도 홋카이 도 홋카이도 지방 훗카이 도 훗카이도 흣카이 도 흣카이도"],["JP.13","효고현","Hyōgo","병고 현 병고현 효고 효고 현 Hyogo"],["JP.08","후쿠시마현","Fukushima","복도현 후꾸시마 현 후쿠시마 현"],["JP.07","후쿠오카현","Fukuoka","복강현 후꾸오까 현 후쿠오카 현"],["JP.06","후쿠이현","Fukui","복정현 후꾸이 현 후쿠이 현"],["JP.11","히로시마현","Hiroshima","광도 현 광도현 히로시마 현"]],"캐나다":[["CA.07","노바스코샤주","Nova Scotia","노바 스코샤 노바 스코샤 주 노바 스코티아 노바 스코티아 주 노바스코샤 노바스코샤 주 노바스코티아 노바스코티아 주 노바스코티아주"],["CA.13","노스웨스트 준주","Northwest Territories","노스웨스트 영토 노스웨스트준주"],["CA.14","누나부트 준주","Nunavut","누나부트 누나부트 주 누나부트준주 누나붓 준주"],["CA.04","뉴브런즈윅주","New Brunswick","뉴 브런스윅 뉴 브런스윅 주 뉴 브런즈윅 뉴 브런즈윅 주 뉴브런스윅 뉴브런스윅 주 뉴브런즈윅 뉴브런즈윅 주"],["CA.05","뉴펀들랜드 래브라도주","Newfoundland and Labrador","NL NL주 뉴 펀들랜드 래브라도 뉴펀들랜드 & 래브라도 뉴펀들랜드 래브라도 뉴펀들랜드 래브라도 주 뉴펀들랜드 앤 래브라도 뉴펀들랜드 앤 래브라도 주 뉴펀들랜드 주 뉴펀들랜드&래브라도 뉴펀들랜드래브라도 뉴펀들랜드래브라도주 뉴펀들랜드앤래브라도 뉴펀들랜드앤래브라도 주 뉴펀들랜드앤래브라도주 뉴펀들랜드주"],["CA.03","매니토바주","Manitoba","마니토바 마니토바 주 마니토바주 매니토바 매니토바 주"],["CA.02","브리티시컬럼비아주","British Columbia","브리티쉬 커럼비아 브리티쉬 컬럼비아 브리티쉬 컬럼비아 주 브리티쉬 콜럼비아 브리티쉬 콜럼비아 주 브리티쉬컬럼비아 브리티쉬컬럼비아 주 브리티쉬콜럼비아 브리티쉬콜럼비아 주 브리티쉬콜럼비아주 브리티시 컬럼비아 브리티시 컬럼비아 주 브리티시 컬럼비아주 브리티시 콜럼비아 브리티시-컬럼비아 주 브리티시컬럼비아 브리티시컬럼비아 주 브리티시콜럼비아 브리티시콜럼비아주 영국컬럼비아"],["CA.11","서스캐처원주","Saskatchewan","사스카체완 사스카체완 주 사스카체완주 사스캐처원 사스캐처원 주 새스캐처완 새스캐처완 주 새스캐처원 새스캐처원 주 새스캐처원주 서스캐처원 서스캐처원 주"],["CA.01","앨버타주","Alberta","알버타 알버타 주 알버타주 알베르타 주 앨버타 앨버타 주"],["CA.08","온타리오주","Ontario","온타리오 온타리오 주"],["CA.12","유콘 준주","Yukon","유콘 주 유콘주 유콘준주"],["CA.10","퀘벡주","Quebec","퀘백 주 퀘백주 퀘벡 주 퀴베크 주 퀴베크주"],["CA.09","프린스에드워드아일랜드","Prince Edward Island","프린스 에드워드 섬 프린스 에드워드 아일랜드 프린스 에드워드 아일랜드 주 프린스에드워드 섬 프린스에드워드아일랜드 주"]],"태국":[["TH.50","깐짜나부리주","Kanchanaburi","깐짜나부리 주 깐차나부리 주 깐차나부리주 칸차나부리 주 칸차나부리주"],["TH.23","깔라신주","Kalasin","깔라신 주 칸라신 주 칼라신 주"],["TH.11","깜팽펫주","Kamphaeng Phet","깜팽펫 주"],["TH.63","끄라비주","Krabi","끄라비 주 크라비 주 크라비주"],["TH.31","나라티왓주","Narathiwat","나라티왓 주"],["TH.43","나콘나욕주","Nakhon Nayok","나콘나욕 주"],["TH.27","나콘랏차시마주","Nakhon Ratchasima","나콘 랏차시마 주 나콘라차시마 주 나콘라차시마주 나콘랏차시마 주"],["TH.53","나콘빠톰주","Nakhon Pathom","나콘빠톰 주 나콘파톰 나콘파톰 주"],["TH.16","나콘사완주","Nakhon Sawan","나콘사완 주 나콘싸완 주"],["TH.64","나콘시탐마랏주","Nakhon Si Thammarat","나콘시탐마랏 주"],["TH.73","나콘파놈주","Nakhon Phanom","나콘파놈 주"],["TH.04","난주","Nan","난 주"],["TH.38","논타부리주","Nonthaburi","논타부리 주"],["TH.79","농부아람푸주","Nong Bua Lamphu","농부아람푸 주"],["TH.17","농카이주","Nong Khai","넝카이 주 농카이 주"],["TH.08","딱주","Tak","딱 주"],["TH.49","뜨랏주","Trat","뜨랏 주"],["TH.65","뜨랑주","Trang","뜨랑 주"],["TH.59","라농주","Ranong province","라넝 주 라넝주 라농 주"],["TH.47","라영 주","Rayong","라용 주"],["TH.06","람빵주","Lampang","람빵 주"],["TH.05","람푼주","Lamphun","람푼 주"],["TH.52","랏차부리주","Ratchaburi","라차부리 주 랏부리 주 랏차부리 주"],["TH.25","로이엣주","Roi Et","로이엣 주"],["TH.34","롭부리주","Lopburi","롭부리 주"],["TH.18","르이주","Loei","르이 주"],["TH.24","마하사라캄주","Maha Sarakham","마하사라캄 주"],["TH.01","매홍손주","Mae Hong Son","매홍손 주 매홍쏜 주"],["TH.78","묵다한주","Mukdahan","묵다한 주"],["TH.40","방콕","Bangkok","끄룽 테프 끄룽 텝 끄룽 텝 마하나컨 끄룽 텝 마하나콘 끄룽테프 끄룽텝 끄룽텝 마하나컨 끄룽텝 마하나콘 방꼭 방코크 크룽 테프 크룽 텝 크룽테프 크룽텝"],["TH.28","부리람주","Buriram","부리람 주"],["TH.81","븡깐주","Bueng Kan","븡깐 주"],["TH.69","빠따니주","Pattani","빠따니 주 빳따니 주 파타니 주 파타니주"],["TH.39","빠툼타니주","Pathum Thani","빠툼타니 주"],["TH.57","쁘라쭈압키리칸주","Prachuap Khiri Khan","쁘라쭈압키리칸 주 쁘라추압 키리칸 주 쁘라추압키리칸 주 쁘라추압키리칸주"],["TH.74","쁘라찐부리주","Prachin Buri","쁘라찐부리 주 쁘라친부리 주 쁘라친부리주"],["TH.80","사깨오주","Sa Kaeo","사깨오 주"],["TH.20","사꼰나콘주","Sakon Nakhon","사꼰나콘 주 사콘나콘 주 사콘나콘주"],["TH.67","사뚠주","Satun","사뚠 주 사툰 주 사툰주"],["TH.37","사라부리주","Saraburi","사라부리 주"],["TH.42","사뭇쁘라깐주","Samut Prakan","사뭇쁘라깐 주 사뭇쁘라칸주 사뭇프라칸 주"],["TH.55","사뭇사콘주","Samut Sakhon","사뭇사콘 주"],["TH.54","사뭇송크람주","Samut Songkhram","사뭇송크람 주 사뭇쏭크람 주"],["TH.68","송클라주","Songkhla","송클라 주 쏭클라 주"],["TH.60","수랏타니주","Surat Thani","수라타니 주 수라타니주 수라트타니 주 수랏 타니 주 수랏타니 주"],["TH.29","수린주","Surin","수린 주"],["TH.09","수코타이주","Sukhothai","수코타이 주"],["TH.51","수판부리주","Suphan Buri","수판부리 주"],["TH.30","시사껫주","Si Sa Ket","시사껫 주 시사켓 주 시사켓주"],["TH.33","싱부리주","Sing Buri","싱부리 주"],["TH.36","아유타야주","Phra Nakhon Si Ayutthaya","쁘라 나콘 씨 아유타야 주 아유타야 주 프라 나콘 시 아유타야 프라 나콘 시 아유타야 주 프라나콘 시 아유타야 주 프라나콘시아유타야주"],["TH.77","암낫짜른주","Amnat Charoen","암낫짜른 주 암낫차른 주"],["TH.35","앙통주","Ang Thong","앙통 주"],["TH.72","야소톤주","Yasothon","야소톤 주"],["TH.70","얄라주","Yala","얄라 주"],["TH.76","우돈타니주","Udon Thani","우돈타니 주"],["TH.10","우따라딧주","Uttaradit","우따라딧 주"],["TH.75","우본랏차타니주","Ubon Ratchathani","우본 라차타니 주 우본라차타니 주 우본라차타니주 우본랏차타니 주"],["TH.15","우타이타니주","Uthai Thani","우타이타니 주"],["TH.48","짠타부리주","Chanthaburi","짠타부리 주 찬타부리 주"],["TH.32","차이낫주","Chai Nat","차이낫 주"],["TH.26","차이야품주","Chaiyaphum","차이야품 주 차이품 주 차이품주"],["TH.44","차층사오주","Chachoengsao","차층사오 주 차층사우 주 차층싸오 주"],["TH.46","촌부리주","Chon Buri","촌부리 주"],["TH.58","춤폰주","Chumphon","춤폰 주"],["TH.03","치앙라이주","Chiang Rai","치앙 라이 주 치앙라이 주"],["TH.02","치앙마이주","Chiang Mai","치앙 마이 주 치앙마이 주"],["TH.22","콘깬주","Khon Kaen","콘깬 주 콘캔 주 콘캔주"],["TH.41","파야오주","Phayao","파야오 주 파야우 주"],["TH.66","파탈룽주","Phatthalung","파탈룽 주"],["TH.61","팡응아주","Phang Nga","팡가 주 팡아 주 팡응아 주"],["TH.56","펫차부리주","Phetchaburi","페차부리 주 펫부리 주 펫차부리 주"],["TH.14","펫차분주","Phetchabun","펫차분 주"],["TH.62","푸껫주","Phuket","푸껫 섬 푸껫 주 푸케트 섬 푸케트 주 푸켓 섬 푸켓 주 푸켓주"],["TH.07","프래주","Phrae","프래 주"],["TH.13","피찟주","Phichit","피찟 주 피칫 주 피칫주"],["TH.12","핏사눌록주","Phitsanulok","핏사눌록 주"]],"튀르키예":[["TR.83","가지안테프주","Gaziantep","가지안테프 주 가지안텝 주 가지안텝주"],["TR.69","귀뮈샤네주","Gümüşhane Province","귀뮈샤네 주 귀뮈쉬하네 주 귀뮈슈하네 주 Guemueshane Province"],["TR.28","기레순주","Giresun","기레순 주"],["TR.50","네브셰히르주","Nevşehir Province","네브셰히르 주 Nevsehir Province"],["TR.73","니데주","Niğde Province","니데 주 니으데 주 Nigde Province"],["TR.20","데니즐리주","Denizli","데니즐리 주"],["TR.93","뒤즈제주","Düzce","뒤즈제 주 Duzce"],["TR.21","디야르바키르주","Diyarbakır Province","디야르바크르 주 디야르바키르 주 Diyarbakir Province"],["TR.53","리제주","Rize Province","리제 주"],["TR.45","마니사주","Manisa","마니사 주"],["TR.72","마르딘주","Mardin","마르딘 주"],["TR.44","말라티아주","Malatya","말라티아 주"],["TR.32","메르신주","Mersin","메르신 주 이첼 이첼 주"],["TR.49","무슈주","Muş","무쉬 주 무슈 주 무시 주 Mus"],["TR.48","물라주","Muğla","무우라 주 무울라 주 무을라 주 물라 주 Mugla"],["TR.87","바르틴주","Bartın","바르튼 주 바르튼주 바르틴 주 Bartin"],["TR.77","바이부르트주","Bayburt Province","바이부르트 주"],["TR.76","바트만주","Batman","바트만 주"],["TR.65","반주","Van","반 주"],["TR.10","발리케시르주","Balıkesir","발르케시르 주 발리케시르 주 Balikesir"],["TR.14","볼루주","Bolu","볼루 주"],["TR.15","부르두르주","Burdur","부르두르 주"],["TR.16","부르사주","Bursa Province","부르사 주"],["TR.13","비틀리스주","Bitlis","비틀리스 주"],["TR.11","빌레지크주","Bilecik","빌레지크 주"],["TR.12","빙괼주","Bingöl","빈괼 주 빙괼 주 Bingoel"],["TR.54","사카리아주","Sakarya","사카리아 사카리아 주"],["TR.55","삼순주","Samsun","삼순 주"],["TR.63","샨리우르파주","Şanlıurfa","샨르우르파 주 샨리우르파 주 Sanliurfa"],["TR.57","시노프주","Sinop","시노프 주 시놉 주"],["TR.80","시르나크주","Şırnak","시르나크 주 시으르나크 주 Sirnak"],["TR.58","시바스주","Sivas","시바스 주"],["TR.74","시이르트주","Siirt","시이르트 주"],["TR.81","아다나주","Adana","아다나 주"],["TR.02","아디야만주","Adıyaman Province","아드야만 주 아디야만 주 Adiyaman Province"],["TR.86","아르다한주","Ardahan","아르다한 주"],["TR.08","아르트빈주","Artvin","아르트빈 주"],["TR.04","아리 주","Ağrı","아르 주 아리주 아으르 주 Agri"],["TR.05","아마시아주","Amasya","아마스야 아마시아 주"],["TR.09","아이든주","Aydın","아이든 주 아이딘 주 아이딘주 Aydin"],["TR.03","아피온카라히사르주","Afyonkarahisar Province","아피온 주 아피온주 아피온카라히사르 주"],["TR.75","악사라이주","Aksaray","악사라이 주"],["TR.07","안탈리아주","Antalya","안탈리아 주"],["TR.68","앙카라주","Ankara","안카라 주 앙카라 주"],["TR.92","얄로바주","Yalova","얄로바 주"],["TR.22","에디르네주","Edirne","에디르네 주"],["TR.25","에르주룸주","Erzurum","에르주룸 주 에르주름 주"],["TR.24","에르진잔주","Erzincan","에르진잔 주"],["TR.26","에스키셰히르주","Eskişehir","에스키셰히르 주 Eskisehir"],["TR.23","엘라지주","Elazığ","엘라즈 주 엘라즈으 주 엘라즈으주 엘라지 주 Elazig"],["TR.52","오르두주","Ordu","오르두 주"],["TR.91","오스마니예주","Osmaniye","오스마니예 주"],["TR.66","요즈가트주","Yozgat","요즈가트 주"],["TR.64","우샤크주","Uşak","우샤크 주 Usak"],["TR.88","이디르주","Iğdır","으드르 주 으으드르 주 이드르 주 이드르주 이디르 주 Igdir"],["TR.34","이스탄불","Istanbul","이스딴불"],["TR.33","이스파르타주","Isparta","으스파르타 주 이스파르타 주"],["TR.35","이즈미르주","İzmir Province","이즈미르 주 Izmir Province"],["TR.85","종굴다크주","Zonguldak Province","종굴다크 주"],["TR.17","차나칼레주","Canakkale","차나칼레 주 차낙칼레 주"],["TR.82","창키리주","Çankırı","찬크르 주 찬키리 주 창크르 주 창키리 주 Cankiri"],["TR.19","초룸주","Çorum","초룸 주 Corum"],["TR.78","카라만주","Karaman","카라만 주"],["TR.89","카라뷔크주","Karabük Province","카라뷔크 주 Karabuek Province"],["TR.84","카르스주","Kars Province","카르스 주"],["TR.37","카스타모누주","Kastamonu","카스타모누 주"],["TR.38","카이세리주","Kayseri","카이세리 주"],["TR.46","카흐라만마라슈주","Kahramanmaraş","카라만마라슈 주 카라만마라슈주 카흐라만마라쉬 주 카흐라만마라쉬주 카흐라만마라슈 주 카흐라만마라스 주 카흐라만마라스주 Kahramanmaras"],["TR.71","코니아주","Konya","코니아 주 콘야 주"],["TR.41","코자엘리주","Kocaeli","코자엘리 코자엘리 주"],["TR.43","퀴타히아주","Kütahya","퀴타히아 주 Kuetahya"],["TR.40","키르셰히르주","Kırşehir","크르셰히르 주 키르셰히르 주 Kirsehir"],["TR.39","키르클라렐리주","Kırklareli","크르클라렐리 주 크르클라렐리주 키르클라렐리 주 Kirklareli"],["TR.79","키리칼레주","Kırıkkale","크르칼레주 크륵칼레 주 키리칼레 주 키릭칼레 주 Kirikkale"],["TR.90","킬리스주","Kilis","킬리스 주"],["TR.59","테키르다주","Tekirdağ","테키르다 주 테키르다아 주 테키르다으 주 Tekirdag"],["TR.60","토카트주","Tokat Province","토카트 주"],["TR.62","툰젤리주","Tunceli","툰젤리 주"],["TR.61","트라브존주","Trabzon","트라브존 주"],["TR.70","하카리주","Hakkâri","하카리 주 학카리 주 Hakkari"],["TR.31","하타이주","Hatay","하타이 하타이 주"]],"포르투갈":[["PT.11","구아르다현","Guarda","구아르다 현"],["PT.13","레이리아현","Leiria","레이리아 현"],["PT.14","리스본현","Lisbon","리스보아 현 리스보아현 리스본 현 리즈보아 현"],["PT.10","마데이라 제도","Madeira","대서양의 진주 마데이라 자치 지방 마데이라 자치구 마데이라제도 포르투갈령 마데이라 제도"],["PT.03","베자현","Beja","베자 현"],["PT.04","브라가현","Braga","브라가 현"],["PT.05","브라간사현","Bragança","브라간사 현 Braganca"],["PT.20","비아나두카스텔루현","Viana do Castelo","비아나 두 카스텔루 현 비아나두카스텔루 현"],["PT.22","비제우현","Viseu","비제우 현"],["PT.21","빌라헤알현","Vila Real","빌라 헤알 현 빌라헤알 현"],["PT.18","산타렝현","Santarém","산타렝 현 Santarem"],["PT.19","세투발현","Setúbal","세투발 현 Setubal"],["PT.02","아베이루현","Aveiro","아베이루 현"],["PT.23","아소르스 제도","Azores","아소레스 아소레스 제도 아소르스 아소르스 자치 지방 아소르스제도 아조레스 아조레스 제도 아조레스섬 아조레스제도"],["PT.08","에보라현","Évora","에보라 현 Evora"],["PT.06","카스텔루브랑쿠현","Castelo Branco","카스텔루 브랑쿠 현 카스텔루브랑쿠 현"],["PT.07","코임브라현","Coimbra","코임브라 현"],["PT.09","파루현","Faro","파루 현"],["PT.16","포르탈레그르현","Portalegre","포르탈레그르 현"],["PT.17","포르투현","Porto","포르투 현"]],"폴란드":[["PL.72","돌니실롱스크주","Lower Silesia","돌노실롱스키에 주 돌니 실롱스크 주 돌니실롱스크 주 하실롱스크 주 하실롱스크주"],["PL.76","루부시주","Lubusz","루부스키에 루부스키에 주 루부시 주"],["PL.75","루블린주","Lublin","루벨스키에 주 루벨스키에주 루블린 주"],["PL.77","마워폴스카주","Lesser Poland","레서폴란드주 마워폴스카 주 마워폴스키에 주 소폴란드 주 소폴란드주"],["PL.78","마조프셰주","Mazovia","마조비에츠키에 주 마조프셰 주"],["PL.85","바르미아마주리주","Warmia-Masuria","바르미아마주리 바르미아마주리 주 바르민스코 마쥐르스키에 주 바르민스코-마주르스키에 바르민스코마쥐르스키에 바르민스코마쥐르스키에 주"],["PL.86","비엘코폴스카주","Greater Poland","그레이터폴란드주 대폴란드 주 대폴란드주 비엘코폴스카 주 비엘코폴스키에 주"],["PL.87","서포모제주","West Pomerania","서포모제 주 자호드니오포모르스키에 주"],["PL.84","시비엥토크시스키에주","Świętokrzyskie","슈비토크르쥐스키 주 시비엥토크시스키에 시비엥토크시스키에 주 시비엥톡시스키에 주 Swietokrzyskie"],["PL.83","실롱스크주","Silesia","실롱스크 주 실롱스키에 주 실롱스키에주"],["PL.79","오폴레주","Opole Voivodeship","오폴레 주 오폴스키에 주"],["PL.74","우치주","Łódź Voivodeship","우츠키에 주 우치 주 Lodz Voivodeship"],["PL.73","쿠야비포모제주","Kujawsko-Pomorskie","쿠야비포모제 쿠야비포모제 주 쿠야프스코포모르스키에 주"],["PL.80","포드카르파츠키에주","Subcarpathia","포드카르파츠키에 주 포트카르파츠키에"],["PL.81","포들라스키에주","Podlasie","포들라스키에 포들라스키에 주"],["PL.82","포모제주","Pomerania","포모르스키에 포모르스키에 주 포모르스키에주 포모제 주"]],"프랑스":[["FR.44","그랑테스트","Grand Est","그랑 에스트 그랑 테스트 그랑데스트 그랑에스트 알자스 샹파뉴 아르덴 로렌 알자스 샹파뉴아르덴 로렌 알자스-샹파뉴-아르덴-로렌 알자스-샹파뉴아르덴-로렌 알자스샹파뉴아르덴로렌"],["FR.28","노르망디","Normandy",""],["FR.75","누벨아키텐","New Aquitaine","누벨 아키텐 누벨-아키텐 아키텐 리무쟁 푸아투 샤랑트 아키텐 리무쟁 푸아투샤랑트 아키텐-리무쟁-푸아투-샤랑트 아키텐-리무쟁-푸아투샤랑트 아키텐리무쟁푸아투샤랑트"],["FR.27","부르고뉴프랑슈콩테","Bourgogne-Franche-Comté","부르고뉴 프랑슈 콩테 부르고뉴 프랑슈콩테 부르고뉴-프랑슈-콩테 부르고뉴-프랑슈콩테 Bourgogne-Franche-Comte"],["FR.53","브르타뉴","Brittany",""],["FR.24","상트르","Centre-Val de Loire","상트르 발 드 루아르 상트르 발드루아르 상트르-발 드 루아르 상트르-발드루아르"],["FR.32","오드프랑스","Hauts-de-France","노르 파 드 칼레 피카르디 노르 파 드 칼레-피카르디 노르 파드칼레 피카르디 노르 파드칼레-피카르디 노르-파 드 칼레-피카르디 노르-파-드-칼레-피카르디 노르-파드칼레-피카르디 노르파드칼레 피카르디 노르파드칼레-피카르디 노르파드칼레피카르디 오 드 프랑스 오-드-프랑스"],["FR.84","오베르뉴론알프","Auvergne-Rhône-Alpes","오베르뉴 론 알프 오베르뉴-론-알프 Auvergne-Rhone-Alpes"],["FR.76","옥시타니","Occitanie","랑그도크 루시용 미디 피레네 랑그도크 루시용-미디 피레네 랑그도크-루시용-미디-피레네 랑그도크루시용 미디피레네 랑그도크루시용-미디피레네 랑그도크루시용미디피레네"],["FR.11","일드프랑스","Île-de-France","일 드 프랑스 일-드-프랑스 파리 지역 Ile-de-France"],["FR.94","코르시카","Corsica",""],["FR.52","페이드라루아르","Pays de la Loire","페이 드 라 루아르 페이 드 라 루아흐 페이드라루아흐 페이들라루아르 페이들라루아흐"],["FR.93","프로방스알프코트다쥐르","Provence-Alpes-Côte d'Azur","프로방스 알프 코트 다쥐르 프로방스 알프 코트다쥐르 프로방스-알프-코트 다쥐르 프로방스-알프-코트다쥐르 Provence-Alpes-Cote d'Azur"]],"필리핀":[["PH.11","다바오 지방","Davao Region","다바오지방"],["PH.08","동비사야스 지방","Eastern Visayas","동부 비사야 동부 비사야 지방 동부 비사야 지역 동비사야 동비사야 지방 동비사야 지역 동비사야지방 이스턴 비사야스 지방"],["PH.NCR","메트로 마닐라","National Capital Region",""],["PH.14","무슬림 민다나오 자치구","Autonomous Region in Muslim Mindanao","ARMM 무슬림민다나오자치구"],["PH.41","미마로파 지방","Mimaropa","미마로파 미마로파 지역 미마로파지방"],["PH.10","북민다나오 지방","Northern Mindanao","노던 민다나오 지방 북민다나오 북민다나오 지역 북민다나오지방 북부 민다나오 북부 민다나오 지방 북부 민다나오 지역"],["PH.05","비콜 지방","Bicol Region","비콜 비콜 지역 비콜지방"],["PH.09","삼보앙가반도 지방","Zamboanga Peninsula","삼보앙가 반도 삼보앙가 반도 지방 삼보앙가 반도 지역 삼보앙가 반도지방 삼보앙가반도 삼보앙가반도지방 잠보앙가 반도 잠보앙가 반도 지방 잠보앙가반도 잠보앙가반도 지방 잠보앙가반도지방"],["PH.06","서비사야스 지방","Western Visayas","서부 비사야 서부 비사야 지방 서부 비사야 지역 서비사야 서비사야 지방 서비사야 지역 서비사야지방 웨스턴 비사야스 지방"],["PH.12","소크사르젠 지방","Soccsksargen","소크사르젠 소크사르젠 지역 소크사르젠지방"],["PH.01","일로코스 지방","Ilocos","일로코스 일로코스 지역 일로코스지방"],["PH.03","중앙루손 지방","Central Luzon","센트럴 루손 지방 중부 루손 중부 루손 지방 중부 루손 지역 중앙 루손 지방 중앙루손 중앙루손 지역 중앙루손지방"],["PH.07","중앙비사야스 지방","Central Visayas","센트럴 비사야스 지방 중부 비사야 중부 비사야 지방 중부 비사야 지역 중앙 비사야 지방 중앙비사야 중앙비사야 지방 중앙비사야 지역 중앙비사야지방"],["PH.02","카가얀밸리 지방","Cagayan Valley","카가얀 계곡 카가얀 계곡 지방 카가얀 계곡 지역 카가얀 밸리 카가얀 밸리 지방 카가얀 밸리 지역 카가얀밸리 카가얀밸리 지역 카가얀밸리지방"],["PH.13","카라가 지방","Caraga","카라가 카라가 지역 카라가지방"],["PH.40","칼라바르손 지방","Calabarzon","칼라바르손 칼라바르손 지역 칼라바르손지방"],["PH.15","코르디예라 행정구","Cordillera","CAR 코르디예라행정구 코르딜레라 행정구"]],"호주":[["AU.03","노던 준주","Northern Territory","노던 테리토리 노던준주 노던테리토리 노던테리토리주 오스트레일리아 북부준주"],["AU.02","뉴사우스웨일스주","New South Wales","NSW 주 뉴 사우스 웨일스 뉴 사우스 웨일스 주 뉴 사우스 웨일즈 뉴사우스 웨일즈 뉴사우스웨일스 뉴사우스웨일스 주 뉴사우스웨일즈 뉴사우스웨일즈 주 뉴사우스웨일즈주"],["AU.07","빅토리아주","Victoria","빅토리아 주"],["AU.05","사우스오스트레일리아주","South Australia","남오스트레일리아 남오스트레일리아 주 남오스트레일리아주 남호주 사우스 오스트레일리아 사우스 오스트레일리아 주 사우스오스트레일리아 사우스오스트레일리아 주"],["AU.01","오스트레일리아 수도 준주","Australian Capital Territory","오스트레일리아 수도 특구 오스트레일리아 수도준주 오스트레일리아수도주 오스트레일리아수도준주 호주 수도 준주 호주 수도 특별구 호주 수도권 호주수도준주"],["AU.08","웨스턴오스트레일리아주","Western Australia","서오스트레일리아 서오스트레일리아 주 서오스트레일리아주 서호주 웨스턴 오스트레일리아 웨스턴 오스트레일리아 주 웨스턴오스트레일리아 웨스턴오스트레일리아 주"],["AU.04","퀸즐랜드주","Queensland","퀸스랜드 퀸스랜드주 퀸슬랜드 퀸슬랜드 주 퀸슬랜드주 퀸즈랜드 퀸즈랜드주 퀸즐랜드 퀸즐랜드 주"],["AU.06","태즈메이니아주","Tasmania","타스마니아 타스마니아 주 타스마니아주 타즈마니아 타즈마니어 타즈매니아 태스마니아 태스마니아주 태스매니아 태스매니아주 태스메이니아 태스메이니아 주 태스메이니아주 태즈마니아 태즈매니아 태즈매니아 섬 태즈매니아 주 태즈매니아주 태즈메이니아 태즈메이니아 섬 태즈메이니아 주 태즈메이니어 태즈메이니어 섬 테즈메니아 테즈메이니아 테즈메이니아 주 테즈메이니어 주"]]};
+/*ADMIN_REGIONS_END*/
+  const CC = {'일본':'JP','베트남':'VN','대만':'TW','태국':'TH','필리핀':'PH','말레이시아':'MY','싱가포르':'SG',
+    '인도네시아':'ID','미국':'US','캐나다':'CA','호주':'AU','영국':'GB','독일':'DE','프랑스':'FR','인도':'IN',
+    '이탈리아':'IT','스페인':'ES','네덜란드':'NL','스위스':'CH','브라질':'BR','멕시코':'MX','뉴질랜드':'NZ',
+    '러시아':'RU','스웨덴':'SE','튀르키예':'TR','포르투갈':'PT','폴란드':'PL','오스트리아':'AT','벨기에':'BE','아르헨티나':'AR'};
+  /* ── 자녀 기준 신청 ──
+     자녀 1명 = 나라 1곳 + 그 나라 안 도시(또는 주·도·현) 최대 2곳. [+ 자녀 추가] 로 블록을 늘림.
+     도시 목록: ① 주·도·현(위 ADMIN_REGIONS · nochijima/행정구역_만들기.py 가 자동 생성) ② open-meteo 무료 도시 검색(키 불필요) */
+  const COUNTRIES = [["일본", "🇯🇵 일본"], ["베트남", "🇻🇳 베트남"], ["대만", "🇹🇼 대만"], ["태국", "🇹🇭 태국"], ["필리핀", "🇵🇭 필리핀"], ["말레이시아", "🇲🇾 말레이시아"], ["싱가포르", "🇸🇬 싱가포르"], ["인도네시아", "🇮🇩 인도네시아"], ["미국", "🇺🇸 미국"], ["캐나다", "🇨🇦 캐나다"], ["호주", "🇦🇺 호주"], ["영국", "🇬🇧 영국"], ["독일", "🇩🇪 독일"], ["프랑스", "🇫🇷 프랑스"], ["인도", "🇮🇳 인도"], ["이탈리아", "🇮🇹 이탈리아"], ["스페인", "🇪🇸 스페인"], ["네덜란드", "🇳🇱 네덜란드"], ["스위스", "🇨🇭 스위스"], ["브라질", "🇧🇷 브라질"], ["멕시코", "🇲🇽 멕시코"], ["뉴질랜드", "🇳🇿 뉴질랜드"], ["러시아", "🇷🇺 러시아"], ["스웨덴", "🇸🇪 스웨덴"], ["튀르키예", "🇹🇷 튀르키예"], ["포르투갈", "🇵🇹 포르투갈"], ["폴란드", "🇵🇱 폴란드"], ["오스트리아", "🇦🇹 오스트리아"], ["벨기에", "🇧🇪 벨기에"], ["아르헨티나", "🇦🇷 아르헨티나"]];
+  const MAX_KIDS = 5, MAX_CITY = 2;
+  const kids = [];          // [{country:'일본', picks:[{type:'admin'|'city', name, sub, code, lat, lon}], el, title, del}]
+  const kidsBox = document.getElementById('kids');
+  const addBtn = document.getElementById('addKid');
+
+  function el(tag, cls, text){ const e=document.createElement(tag); if(cls) e.className=cls; if(text!=null) e.textContent=text; return e; }
+  // 검색 비교용: 소문자 + 공백·기호 제거 + 악센트 제거(Quảng → quang)
+  function norm(t){ return (t||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[đĐ]/g,'d').toLowerCase().replace(/[\s.\-’']/g,''); }
+
+  // 도시 고르기(검색 + 목록). 2곳 넘게는 못 고름.
+  function buildPicker(k){
+    const country = k.country, admins = ADMIN_REGIONS[country] || [];
+    const area = el('div');
+    const chips = el('div','rchips');
+    const inp = el('input'); inp.type='search'; inp.autocomplete='off'; inp.enterKeyHint='search';
+    const ex = admins.slice(0,2).map(a=>a[1]).join(', ');
+    inp.placeholder = admins.length ? ('지역·도시 검색 (한글/영어, 예: '+ex+')') : '도시 이름 검색 (한글/영어)';
+    const counter = el('div','rcount');
+    const list = el('div','rbox');
+    area.append(chips, inp, counter, list);
+
+    let timer=null, seq=0, cityItems=[], cityMsg='';
+
+    function same(x,p){ return x.type===p.type && (p.type==='admin' ? x.code===p.code : (x.name===p.name && x.sub===p.sub)); }
+    function picked(p){ return k.picks.some(x=> same(x,p)); }
+    function drawChips(){
+      chips.innerHTML='';
+      k.picks.forEach((p,i)=>{
+        const ch = el('span','rchip', p.type==='admin' ? p.name : (p.sub ? p.name+' · '+p.sub : p.name));
+        const x = el('button',null,'×'); x.type='button'; x.setAttribute('aria-label', p.name+' 빼기');
+        x.addEventListener('click', ()=>{ k.picks.splice(i,1); drawChips(); drawList(); update(); });
+        ch.appendChild(x); chips.appendChild(ch);
+      });
+      chips.style.display = k.picks.length ? '' : 'none';
+    }
+    function toggle(p){
+      const i = k.picks.findIndex(x=> same(x,p));
+      if(i>=0){ k.picks.splice(i,1); }
+      else if(k.picks.length >= MAX_CITY){ counter.textContent='도시는 '+MAX_CITY+'곳까지 고를 수 있어요. (위의 × 로 하나를 빼고 다시 골라 주세요)'; counter.classList.add('warn'); return; }
+      else { k.picks.push(p); }
+      drawChips(); drawList(); update();
+    }
+    function item(p, main, sub){
+      const on = picked(p);
+      const b = el('button', 'ritem'+(on?' on':'')); b.type='button';
+      b.appendChild(el('span','rck', on?'✓':''));
+      b.appendChild(el('span','rmain', main));
+      if(sub) b.appendChild(el('span','sub', sub));
+      b.addEventListener('click', ()=> toggle(p));
+      return b;
+    }
+    function drawList(){
+      const raw = inp.value.trim(), q = norm(raw);
+      list.innerHTML='';
+      const hits = admins.filter(a=> !q || norm(a[1]).includes(q) || norm(a[2]).includes(q) || norm(a[3]).includes(q));
+      if(admins.length){
+        list.appendChild(el('div','rsec', q ? '📍 주·도·현 ('+hits.length+')' : '📍 주·도·현 전체 ('+admins.length+')'));
+        hits.forEach(a=>{
+          // 한국어 이름·영어 이름이 아니라 별칭으로 걸렸으면 그 별칭을 같이 보여줌(예: 페낭 → 피낭주)
+          let sub = a[2];
+          if(q && !norm(a[1]).includes(q) && !norm(a[2]).includes(q)){
+            const al = (a[3]||'').split(' ').find(w=> norm(w).includes(q)); if(al) sub = '= '+al+' · '+a[2];
+          }
+          list.appendChild(item({type:'admin', name:a[1], sub:a[2], code:a[0]}, a[1], sub));
+        });
+        if(q && !hits.length) list.appendChild(el('div','msg','주·도·현 목록엔 없어요. 아래 도시 검색 결과를 확인하세요.'));
+      } else {
+        list.appendChild(el('div','msg', '이 나라는 주·도 같은 구역이 따로 없어요. 위 칸에 도시 이름을 검색해 주세요.'));
+      }
+      if(q.length >= 2 || (!admins.length && q)){
+        list.appendChild(el('div','rsec','🏙️ 도시 검색'));
+        if(cityMsg) list.appendChild(el('div','msg',cityMsg));
+        cityItems.forEach(c=> list.appendChild(item(c, c.name, c.sub)));
+      }
+      const n = k.picks.length;
+      list.classList.toggle('atmax', n >= MAX_CITY);
+      counter.classList.remove('warn');
+      counter.textContent = n === 0 ? '목록에서 누르면 선택돼요 (1곳 필수 · 2곳까지)'
+        : n < MAX_CITY ? (n+'곳 선택 · 1곳 더 고를 수 있어요 (예: 학교 있는 곳)')
+        : (MAX_CITY+'곳 선택 완료');
+    }
+    async function searchCity(raw){
+      const my = ++seq;
+      cityItems=[]; cityMsg='검색 중…'; drawList();
+      try{
+        const url='https://geocoding-api.open-meteo.com/v1/search?name='+encodeURIComponent(raw)+'&count=8&language=ko&format=json&countryCode='+CC[country];
+        const d = await (await fetch(url)).json();
+        if(my!==seq) return;
+        (d.results||[]).filter(x=>String(x.feature_code||'').startsWith('PPL')).forEach(x=>{
+          if(!cityItems.some(o=>o.name===x.name && o.sub===(x.admin1||'')))
+            cityItems.push({type:'city', name:x.name, sub:x.admin1||'', lat:x.latitude, lon:x.longitude});
+        });
+        cityMsg = cityItems.length ? '' : '도시 검색 결과가 없어요.';
+      }catch(e){
+        if(my!==seq) return;
+        cityMsg = '도시 검색이 잠시 안 돼요. 위 목록에서 골라 주세요.';
+      }
+      drawList();
+    }
+    inp.addEventListener('input', ()=>{
+      clearTimeout(timer);
+      const raw = inp.value.trim();
+      if(norm(raw).length >= 2 || (!admins.length && raw)){ cityMsg='검색 중…'; cityItems=[]; timer=setTimeout(()=>searchCity(raw), 350); }
+      else { seq++; cityItems=[]; cityMsg=''; }
+      drawList();
+    });
+    inp.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); inp.blur(); } });
+    drawChips(); drawList();
+    return area;
+  }
+
+  // 자녀 한 명의 블록: ① 나라 1개 ② 도시 1~2곳
+  function buildKid(k){
+    const box = el('div','kid');
+    const head = el('div','khead');
+    const title = el('span','ktitle');
+    const del = el('button','kdel','이 자녀 빼기'); del.type='button';
+    head.append(title, del); box.appendChild(head);
+
+    box.appendChild(el('div','klab','① 자녀가 있는 나라를 골라주세요'));
+    const cwrap = el('div','chips');
+    COUNTRIES.forEach(c=>{
+      const b = el('button','cbtn', c[1]); b.type='button'; b.dataset.v = c[0];
+      b.addEventListener('click', ()=> setCountry(c[0]));
+      cwrap.appendChild(b);
+    });
+    const change = el('button','kchange','다른 나라로 바꾸기'); change.type='button';
+    box.append(cwrap, change);
+
+    const cityWrap = el('div','kcity');
+    cityWrap.appendChild(el('div','klab','② 자녀가 사는 도시를 골라주세요'));
+    const note = el('p','knote'); note.innerHTML = '<b>1곳은 꼭</b> 골라주세요. 1곳 더 고를 수 있어요. (예: 사는 곳 + 학교 있는 곳)';
+    const host = el('div');
+    cityWrap.append(note, host); box.appendChild(cityWrap);
+
+    function draw(){
+      [...cwrap.children].forEach(b=>{
+        b.classList.toggle('on', b.dataset.v === k.country);
+        b.style.display = (!k.country || b.dataset.v === k.country) ? '' : 'none';   // 고르면 그 나라만 남김(화면이 짧아짐)
+      });
+      change.style.display = k.country ? '' : 'none';
+      cityWrap.style.display = k.country ? '' : 'none';
+    }
+    function setCountry(v){
+      if(k.country === v) return;
+      k.country = v; k.picks = [];
+      host.innerHTML = ''; if(v) host.appendChild(buildPicker(k));
+      errMsg.style.display = 'none';
+      draw(); update();
+    }
+    change.addEventListener('click', ()=> setCountry(''));
+    del.addEventListener('click', ()=>{
+      const i = kids.indexOf(k); if(i >= 0) kids.splice(i,1);
+      box.remove(); errMsg.style.display = 'none'; update();
+    });
+    k.el = box; k.title = title; k.del = del;
+    draw();
+    return box;
+  }
+
+  function addKid(){
+    if(kids.length >= MAX_KIDS) return;
+    const k = {country:'', picks:[]};
+    kids.push(k); kidsBox.appendChild(buildKid(k)); update();
+    return k;
+  }
+  function update(){
+    const n = kids.length;
+    kids.forEach((k,i)=>{ k.title.textContent = '자녀 '+(i+1); k.del.style.display = n > 1 ? '' : 'none'; });
+    addBtn.style.display = n >= MAX_KIDS ? 'none' : '';
+    renderMsg();
+  }
+  addBtn.addEventListener('click', function(){
+    const k = addKid(); if(!k) return;
+    track('자녀 추가 클릭');
+    k.el.scrollIntoView({behavior:'smooth', block:'start'});
+  });
+
+  /* ── 카톡으로 보내기: 고른 내용을 짧은 글로 → 복사 → 놓치지마 채널 채팅방 열기 ──
+     [놓치지마 사전신청]
+     자녀1: 일본 / 도쿄도, 오사카부
+     자녀2: 호주 / 시드니(뉴사우스웨일스주)      ← 도시는 같은 이름이 여러 곳에 있어 주·도 이름을 괄호로 붙임 */
+  function pickName(p){ return p.type==='admin' ? p.name : (p.sub ? p.name+'('+p.sub+')' : p.name); }
+  function firstBad(){ return kids.find(k=> !k.country || !k.picks.length); }
+  function lines(fill){
+    return kids.map((k,i)=> '자녀'+(i+1)+': '+(k.country || fill[0])+' / '+(k.picks.length ? k.picks.map(pickName).join(', ') : fill[1]));
+  }
+  // 걱정 질문(선택 · 여러 개) — 고르면 메시지 끝에 한 줄. 고른 순서가 아니라 보기 순서대로 적음
+  const worryBtns = [...document.querySelectorAll('#worries .cbtn')];
+  worryBtns.forEach(function(b){
+    b.setAttribute('aria-pressed', 'false');
+    b.addEventListener('click', function(){
+      const on = b.classList.toggle('on');
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+      renderMsg();
+    });
+  });
+  function worries(){ return worryBtns.filter(function(b){ return b.classList.contains('on'); }).map(function(b){ return b.dataset.v; }); }
+  function worryLine(){ const w = worries(); return w.length ? '\n걱정: ' + w.join(', ') : ''; }
+  function kakaoText(){
+    if(firstBad()) return '';
+    return '[놓치지마 사전신청]\n' + lines(['','']).join('\n') + worryLine();
+  }
+  function renderMsg(){
+    const box = document.getElementById('msgBox'); if(!box) return;
+    const t = kakaoText();
+    box.textContent = t || (kids.some(k=>k.country)
+      ? '[놓치지마 사전신청]\n' + lines(['(나라를 골라주세요)','(도시를 골라주세요)']).join('\n') + worryLine()
+      : '위에서 나라와 도시를 골라 주세요');
+    box.classList.toggle('empty', !t);
+  }
+  // 어떤 화면에서 눌렀는지(복사 성공·실패 이벤트에 함께 남김 — 카카오톡 안 브라우저에서 잘 되는지 보려고)
+  const UA = navigator.userAgent || '';
+  const IOS = /iphone|ipad|ipod/i.test(UA) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  const ENV = /KAKAOTALK/i.test(UA) ? '카카오톡 안 브라우저' : IOS ? '아이폰·아이패드' : /android/i.test(UA) ? '안드로이드' : '컴퓨터·기타';
+
+  // 예전 방식 복사(execCommand) — 아이폰은 글을 '범위 선택'해야 복사됨
+  function legacyCopy(t){
+    let ok = false;
+    const ta = document.createElement('textarea');
+    ta.value = t;
+    ta.setAttribute('readonly', '');           // 휴대폰 키보드가 뜨지 않게
+    ta.style.cssText = 'position:fixed;top:0;left:0;width:1px;height:1px;padding:0;border:0;opacity:0;font-size:16px';
+    document.body.appendChild(ta);
+    try{
+      if(IOS){
+        ta.contentEditable = 'true'; ta.readOnly = false;
+        const r = document.createRange(); r.selectNodeContents(ta);
+        const sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(r);
+        ta.setSelectionRange(0, t.length);
+        ta.readOnly = true;
+      }else{
+        ta.focus(); ta.select();
+      }
+      ok = document.execCommand('copy');
+    }catch(e){ ok = false; }
+    document.body.removeChild(ta);
+    try{ window.getSelection().removeAllRanges(); }catch(e){}
+    return ok;
+  }
+  // 복사: ① 새 방식(navigator.clipboard) ② 안 되면 예전 방식(execCommand)으로 다시 시도. 결과를 done(true/false) 로 알려줌
+  function copyText(t, done){
+    let fin = false;
+    function finish(ok, how){
+      if(fin) return; fin = true;
+      track(ok ? '복사 성공' : '복사 실패', {방식: how, 화면: ENV});
+      done(ok);
+    }
+    if(navigator.clipboard && navigator.clipboard.writeText && window.isSecureContext){
+      let p;
+      try{ p = navigator.clipboard.writeText(t); }catch(e){ p = null; }
+      if(p && p.then){
+        p.then(function(){ finish(true, 'clipboard'); },
+               function(){ finish(legacyCopy(t), 'execCommand'); });
+        // 일부 앱 안 브라우저는 답이 오지 않음 → 1.5초 기다린 뒤 예전 방식으로
+        setTimeout(function(){ if(!fin) finish(legacyCopy(t), 'execCommand(대기 후)'); }, 1500);
+        return;
+      }
+    }
+    finish(legacyCopy(t), 'execCommand');
+  }
+
+  // 안내 창
+  const kModal = document.getElementById('kModal');
+  const kTitle = document.getElementById('kTitle');
+  const kMsg = document.getElementById('kMsg');
+  const kHint = document.getElementById('kHint');
+  function setCopied(ok, again){
+    kTitle.textContent = ok ? (again ? '다시 복사됐어요 ✅' : '신청 내용이 복사됐어요 ✅') : '아래 내용을 길게 눌러 복사해 주세요';
+    kTitle.classList.toggle('fail', !ok);
+    kMsg.classList.toggle('fail', !ok);
+    kHint.textContent = ok ? '위 내용이 채팅방에 보낼 글이에요.' : '자동 복사가 안 됐어요. 위 상자를 길게 눌러 "복사"를 골라 주세요.';
+  }
+  function openGuide(t){
+    kMsg.textContent = t;
+    kTitle.textContent = '복사하는 중…'; kTitle.classList.remove('fail'); kMsg.classList.remove('fail');
+    kModal.hidden = false;
+    document.body.style.overflow = 'hidden';
+    kModal.scrollTop = 0;
+    track('안내창 표시', {화면: ENV});
+  }
+  function closeGuide(){
+    kModal.hidden = true;
+    document.body.style.overflow = '';
+    document.getElementById('sendBtn').focus();
+  }
+  document.getElementById('sendBtn').addEventListener('click', function(e){
+    e.preventDefault();                       // 채팅방으로 바로 넘어가지 않고 안내 창을 먼저 보여줌
+    errMsg.style.display = 'none';
+    const bad = firstBad();
+    if(bad){
+      const who = '자녀 '+(kids.indexOf(bad)+1)+': ';
+      showErr(who + (bad.country ? '사는 도시를 1곳 이상 골라 주세요.' : '자녀가 있는 나라를 골라 주세요.'), bad.el);
+      return;
+    }
+    const t = kakaoText();
+    openGuide(t);
+    copyText(t, function(ok){ setCopied(ok, false); });
+    track('카톡으로 보내기 클릭');
+    worries().forEach(function(w){ track('걱정 선택: ' + w); });   // 보낼 때 고른 항목마다 1번씩
+  });
+  document.getElementById('kAgain').addEventListener('click', function(){
+    track('다시 복사 클릭', {화면: ENV});
+    copyText(kMsg.textContent, function(ok){ setCopied(ok, true); });
+  });
+  document.getElementById('kOpen').addEventListener('click', function(){ track('채팅방 열기 클릭', {화면: ENV}); });
+  document.getElementById('kClose').addEventListener('click', closeGuide);
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape' && !kModal.hidden) closeGuide(); });
+  // 안내 창의 글 상자를 누르면 글 전체가 선택됨(길게 눌러 복사하기 쉽게)
+  kMsg.addEventListener('click', function(){
+    try{ const r = document.createRange(); r.selectNodeContents(this); const sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(r); }catch(e){}
+  });
+  // '보낼 내용' 상자를 누르면 글 전체가 선택됨(직접 복사하기 쉽게)
+  document.getElementById('msgBox').addEventListener('click', function(){
+    if(this.classList.contains('empty')) return;
+    try{ const r = document.createRange(); r.selectNodeContents(this); const sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(r); }catch(e){}
+  });
+  addKid();   // 처음엔 자녀 1명 블록
+</script>
+</body>
+</html>

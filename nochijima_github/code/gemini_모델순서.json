@@ -1,0 +1,8 @@
+{
+  "설명": "Gemini 모델을 시도하는 순서입니다(앞의 것이 실패하면 다음 것). 이 파일에는 키가 없습니다. 이 파일을 지우면 gemini_config.json 의 순서를 씁니다.",
+  "models": [
+    "gemini-3.1-flash-lite",
+    "gemini-3.5-flash-lite",
+    "gemini-flash-lite-latest"
+  ]
+}

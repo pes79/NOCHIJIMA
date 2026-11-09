@@ -1,0 +1,9 @@
+{
+  "설명": "이 파일을 복사해 이름을 gemini_config.json 으로 바꾸고 api_key 에 내 Gemini API 키를 넣으세요(aistudio.google.com 에서 발급). gemini_config.json 은 .gitignore 에 있어 깃허브에 올라가지 않습니다. enabled=false 면 AI 판단 없이 키워드만 씁니다.",
+  "api_key": "YOUR_KEY_HERE",
+  "enabled": true,
+  "models": [
+    "gemini-3.1-flash-lite",
+    "gemini-flash-lite-latest"
+  ]
+}

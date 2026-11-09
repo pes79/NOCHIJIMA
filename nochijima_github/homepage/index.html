@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>놓치지마 — 자녀 사는 도시에 큰일이 나면, 카톡으로 바로</title>
+<meta name="description" content="해외에 자녀를 둔 부모님께. 자녀 사는 도시의 지진·폭우·재난·비자 변화를 현지 정부·기상청 같은 공식 기관에서 확인해 한국어로, 카카오톡으로 알려드립니다. 지금은 사전신청 단계입니다.">
+
+<!-- 오픈그래프(카톡·페북·커뮤니티 공유 시 미리보기 썸네일·제목·설명) -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="놓치지마">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:title" content="놓치지마 🌍 자녀 사는 도시에 큰일이 나면, 카톡으로 바로">
+<meta property="og:description" content="해외에 자녀를 둔 부모님께 — 지진·폭우·재난·비자 변화를 현지 정부·기상청 같은 공식 기관에서 확인해 한국어로 알려드려요. 큰일이 아니면 조용해요.">
+<meta property="og:url" content="https://dainty-creponne-765c4f.netlify.app">
+<meta property="og:image" content="https://dainty-creponne-765c4f.netlify.app/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="놓치지마 — 자녀 사는 도시 소식, 한국어 카톡 알림">
+
+<!-- 트위터(X) 카드 -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="놓치지마 🌍 자녀 사는 도시에 큰일이 나면, 카톡으로 바로">
+<meta name="twitter:description" content="해외에 자녀를 둔 부모님께 — 지진·폭우·재난·비자 변화를 현지 정부·기상청 같은 공식 기관에서 확인해 한국어로 알려드려요. 큰일이 아니면 조용해요.">
+<meta name="twitter:image" content="https://dainty-creponne-765c4f.netlify.app/og-image.png">
+
+<style>
+  :root{
+    --navy:#0E1420; --navy-2:#141C2B; --navy-3:#1B2536; --line:#26324a;
+    --text:#EAF0F8; --muted:#95A2B8; --dim:#6b7788;
+    --red:#E8483D; --green:#3DB56E;
+    --kakao:#b2c7da;               /* 카카오톡 채팅 배경 */
+    --radius:18px; --maxw:1080px;
+    --sp:clamp(56px,9vw,104px);    /* 섹션 세로 여백 */
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--navy);color:var(--text);line-height:1.65;letter-spacing:-0.01em;
+    font-family:"Apple SD Gothic Neo","Pretendard","Malgun Gothic","Segoe UI",-apple-system,sans-serif;
+    -webkit-font-smoothing:antialiased;overflow-x:hidden;
+    word-break:keep-all;          /* 한국어: 단어(어절) 중간에서 안 끊기게 */
+    overflow-wrap:break-word;     /* 아주 긴 단어(URL 등)만 예외적으로 줄바꿈 */
+  }
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 22px}
+  section{padding:var(--sp) 0}
+  h2{font-size:clamp(1.6rem,4vw,2.4rem);font-weight:800;line-height:1.28;letter-spacing:-0.03em}
+  .eyebrow{color:var(--green);font-weight:800;font-size:.82rem;letter-spacing:.12em;text-transform:uppercase;margin-bottom:14px}
+  .lead{color:var(--muted);font-size:clamp(1rem,2.2vw,1.14rem);max-width:640px;margin-top:14px}
+  .center{text-align:center}.center .lead{margin-left:auto;margin-right:auto}
+  .red{color:var(--red)}.grn{color:var(--green)}
+  a{color:inherit}
+
+  /* 버튼 */
+  .btn{display:inline-flex;align-items:center;gap:9px;font-weight:800;text-decoration:none;
+    border-radius:13px;padding:15px 28px;font-size:1.04rem;letter-spacing:-0.01em;transition:.16s;cursor:pointer}
+  .btn-red{background:var(--red);color:#fff;box-shadow:0 12px 30px rgba(232,72,61,.32)}
+  .btn-red:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(232,72,61,.44);filter:brightness(1.06)}
+  .btn-ghost{border:1px solid var(--line);color:var(--text);background:var(--navy-2)}
+  .btn-ghost:hover{border-color:var(--green)}
+  .btn-sm{padding:11px 18px;font-size:.92rem;border-radius:11px}
+
+  /* 상단바 */
+  .nav{position:sticky;top:0;z-index:50;background:rgba(14,20,32,.8);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+  .nav .wrap{display:flex;align-items:center;gap:12px;height:64px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:900;font-size:1.16rem;letter-spacing:-0.02em}
+  .logo-img{height:34px;width:34px;object-fit:contain;border-radius:9px}
+  .logo-emoji{height:34px;width:34px;display:none;align-items:center;justify-content:center;font-size:21px;background:var(--navy-3);border-radius:9px;border:1px solid var(--line)}
+  .navbadge{display:inline-flex;align-items:center;gap:7px;font-size:.78rem;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:5px 11px;background:var(--navy-2)}
+  .nav .spacer{flex:1}
+  .blink{width:8px;height:8px;border-radius:50%;background:var(--red);box-shadow:0 0 0 4px rgba(232,72,61,.18);animation:blink 1.2s infinite}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+
+  /* 히어로 */
+  .hero{position:relative;text-align:center;padding:clamp(60px,10vw,110px) 0 var(--sp);overflow:hidden}
+  .hero::before{content:"";position:absolute;inset:0;pointer-events:none;background:
+    radial-gradient(720px 360px at 50% -6%, rgba(232,72,61,.18), transparent 62%),
+    radial-gradient(560px 340px at 82% 14%, rgba(61,181,110,.13), transparent 60%)}
+  .hero .pill{position:relative;display:inline-flex;align-items:center;gap:8px;margin-bottom:24px;padding:8px 16px;border:1px solid var(--line);border-radius:999px;background:var(--navy-2);color:var(--text);font-size:1rem;font-weight:700}
+  .hero h1{position:relative;font-size:clamp(2.1rem,5.4vw,3.5rem);font-weight:900;line-height:1.2;letter-spacing:-0.04em}
+  .hero h1 .grn{background:linear-gradient(180deg,#5fd08c,#2ea45f);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .hero p.sub{position:relative;color:#b9c4d6;max-width:600px;margin:20px auto 0;font-size:clamp(1.1rem,2.4vw,1.28rem)}
+  .hero .cta{position:relative;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:34px}
+  .hero .trust{position:relative;margin-top:22px;color:var(--dim);font-size:.86rem}
+
+  /* 첫 화면 사전신청 (카톡 채널 버튼 + 이메일 한 칸) */
+  .apply{position:relative;max-width:440px;margin:26px auto 0;scroll-margin-top:84px}
+  .btn-kakao{display:flex;width:100%;justify-content:center;background:#FEE500;color:#191600;box-shadow:0 10px 26px rgba(254,229,0,.16)}
+  .btn-kakao:hover{transform:translateY(-2px);filter:brightness(1.04)}
+  .apply .or{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:.92rem;margin:12px 0 10px}
+  .apply .or::before,.apply .or::after{content:"";flex:1;height:1px;background:var(--line)}
+  .erow{display:flex;gap:8px}
+  .erow input{flex:1;min-width:0;background:var(--navy-2);border:1px solid var(--line);color:var(--text);border-radius:13px;
+    padding:14px 15px;font-size:1.08rem;outline:none;font-family:inherit;-webkit-appearance:none;appearance:none}
+  .erow input:focus{border-color:var(--green)}
+  .erow input::placeholder{color:var(--muted)}
+  .erow button{flex:none;border:0;font-family:inherit;padding:14px 22px}
+  .erow button:disabled{opacity:.6;cursor:default}
+  .apply .anote{color:var(--muted);font-size:.95rem;margin-top:11px}
+  .apply .agree{display:flex;align-items:center;justify-content:flex-start;gap:9px;color:var(--muted);font-size:.95rem;margin-top:10px;cursor:pointer;text-align:left}
+  .apply .agree2{margin-top:6px;justify-content:flex-start}
+  .apply .agree input{flex:none;width:22px;height:22px;accent-color:var(--green);cursor:pointer}
+  .apply .agree b{color:var(--text)}
+  .apply .agree a{color:var(--green);text-decoration:underline}
+  .ptable{width:100%;border-collapse:collapse;margin-top:10px;font-size:.92rem}
+  .ptable th,.ptable td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top}
+  .ptable th{width:32%;color:var(--text);font-weight:700;background:var(--navy-2);white-space:nowrap}
+  .apply .aerr{display:none;color:#ff7a70;font-size:1rem;font-weight:700;margin-top:8px}
+  .apply .adone{display:none;background:rgba(61,181,110,.10);border:1px solid rgba(61,181,110,.4);border-radius:14px;padding:16px 16px 14px}
+  .apply .kdone{margin-top:12px}
+  .apply .khelp{color:var(--muted);font-size:1rem;margin-top:12px}
+  .apply .khelp b{color:var(--text)}
+  .apply .ktip{margin-top:10px !important;padding-top:10px;border-top:1px solid rgba(61,181,110,.25);color:var(--text) !important;font-size:1rem !important}
+  .apply .ktip b{display:inline !important;font-size:inherit !important;color:var(--green)}
+  .apply .ktip span{color:var(--muted)}
+  .apply .adone b{display:block;font-size:1.18rem}
+  .apply .adone p{color:var(--muted);font-size:1.02rem;margin-top:4px}
+  .apply .adone a{display:inline-block;margin-top:10px;color:var(--green);font-weight:800;text-decoration:none;font-size:1.05rem}
+  .points{position:relative;list-style:none;max-width:440px;margin:20px auto 0;text-align:left;display:flex;flex-direction:column;gap:10px}
+  .points li{position:relative;padding-left:26px;color:var(--muted);font-size:1.05rem;line-height:1.5}
+  .points li::before{content:"✓";position:absolute;left:2px;top:0;color:var(--green);font-weight:900}
+  .points li b{color:var(--text);font-weight:800}
+  .hero .more{position:relative;display:inline-block;margin-top:18px;color:var(--muted);font-size:.98rem;text-decoration:none;border-bottom:1px dashed var(--line)}
+
+  /* 공통 카드 그리드 */
+  .grid{display:grid;gap:16px}
+  .g2{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+  .card{background:var(--navy-2);border:1px solid var(--line);border-radius:var(--radius);padding:26px}
+  .card .ic{font-size:28px;display:block;margin-bottom:12px;line-height:1}
+  .card h3{font-size:1.1rem;font-weight:800;margin-bottom:6px}
+  .card p{color:var(--muted);font-size:.94rem}
+
+  .band{background:var(--navy-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+
+  /* 문제제기 */
+  .prob{background:var(--navy);border:1px solid var(--line);border-radius:14px;padding:20px}
+  .prob .k{color:var(--red);font-weight:800;font-size:.92rem;margin-bottom:6px}
+  .prob p{color:var(--muted);font-size:.92rem}
+
+  /* 카카오톡 폰 목업 */
+  .phonewrap{display:flex;justify-content:center;margin-top:36px}
+  .phone{width:330px;max-width:92vw;background:#0a0f18;border-radius:40px;padding:12px;border:1px solid #222c3f;box-shadow:0 40px 80px rgba(0,0,0,.5)}
+  .pscreen{background:var(--kakao);border-radius:30px;overflow:hidden}
+  .ptop{display:flex;align-items:center;gap:9px;background:#a4bdd1;padding:12px 16px;font-weight:800;color:#1b2b3a;font-size:.95rem}
+  .ptop .dot{width:26px;height:26px;border-radius:8px;background:#0E1420;display:flex;align-items:center;justify-content:center;font-size:15px}
+  .pchat{padding:16px 14px;display:flex;flex-direction:column;gap:14px}
+  .kmsg{max-width:88%}
+  .kname{font-size:.76rem;color:#33475b;margin:0 0 4px 6px;font-weight:700}
+  .krow{display:flex;align-items:flex-end;gap:6px}
+  .kbubble{background:#fff;border-radius:4px 16px 16px 16px;padding:11px 13px;font-size:.86rem;color:#1b1b1b;line-height:1.5;box-shadow:0 1px 1px rgba(0,0,0,.08);white-space:pre-line}
+  .kbubble b{font-weight:800;font-size:.9rem}
+  .kbubble .muted{color:#6b7280}
+  .kbubble .rd{color:var(--red);font-weight:800}
+  .kbubble .gr{color:#1f9e58;font-weight:800}
+  .ktime{font-size:.68rem;color:#40566a;flex:none;padding-bottom:2px}
+  .kdiv{height:1px;background:rgba(0,0,0,.06);margin:2px 0}
+
+  /* 움직이는 예시 피드 */
+  .live{display:inline-flex;align-items:center;gap:8px;color:var(--muted);font-size:.9rem;margin-top:12px}
+  .feed{position:relative;max-width:440px;margin:30px auto 0;height:420px;overflow:hidden;
+    -webkit-mask-image:linear-gradient(to bottom,transparent,#000 13%,#000 85%,transparent);
+            mask-image:linear-gradient(to bottom,transparent,#000 13%,#000 85%,transparent)}
+  .track{display:flex;flex-direction:column;gap:12px;animation:scroll 40s linear infinite}
+  .feed:hover .track{animation-play-state:paused}
+  @keyframes scroll{from{transform:translateY(0)}to{transform:translateY(-50%)}}
+  .noti{background:var(--navy-2);border:1px solid var(--line);border-left:3px solid var(--line);border-radius:14px;padding:13px 15px;text-align:left;box-shadow:0 8px 22px rgba(0,0,0,.28)}
+  .noti.r{border-left-color:var(--red)} .noti.g{border-left-color:var(--green)}
+  .noti .top{display:flex;align-items:center;gap:7px;margin-bottom:5px}
+  .noti .app{font-weight:800;font-size:.8rem} .noti .t{margin-left:auto;color:var(--dim);font-size:.72rem}
+  .noti .ti{font-weight:800;font-size:.95rem} .noti .bd{color:var(--muted);font-size:.86rem;margin-top:2px}
+
+  /* 작동 3단계 */
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:8px}
+  .step{background:var(--navy-2);border:1px solid var(--line);border-radius:var(--radius);padding:26px;position:relative}
+  .step .n{position:absolute;top:18px;right:22px;font-size:2.4rem;font-weight:900;color:var(--navy-3)}
+  .step .ic{font-size:26px;display:block;margin-bottom:12px}
+  .step h3{font-size:1.08rem;font-weight:800;margin-bottom:6px}
+  .step p{color:var(--muted);font-size:.92rem}
+
+  /* 장점 */
+  .why .card{display:flex;gap:14px;align-items:flex-start}
+  .why .ic{font-size:24px;margin:0;flex:none}
+
+  /* 신뢰 */
+  .trow{display:flex;gap:12px;align-items:flex-start;background:var(--navy);border:1px solid var(--line);border-radius:12px;padding:15px 17px;margin-bottom:10px}
+  .trow .b{flex:none;width:24px;height:24px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.85rem}
+  .b.ok{background:rgba(61,181,110,.14);color:var(--green)} .b.no{background:rgba(232,72,61,.14);color:var(--red)}
+  .trow p{font-size:.95rem} .trow p b{color:var(--text)}
+  .srcs{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+  .src{font-size:.82rem;color:var(--muted);border:1px solid var(--line);background:var(--navy);padding:6px 13px;border-radius:999px}
+  .notsup{margin-top:20px;background:var(--navy);border:1px dashed var(--line);border-radius:12px;padding:16px 18px}
+  .notsup b{color:var(--text);font-size:.95rem} .notsup p{color:var(--muted);font-size:.9rem;margin-top:6px}
+
+  /* 나라 */
+  .countries{display:grid;grid-template-columns:repeat(7,1fr);gap:10px;margin-top:26px}
+  .flag{background:var(--navy-2);border:1px solid var(--line);border-radius:12px;padding:14px 6px;text-align:center}
+  .flag .f{font-size:25px;line-height:1}.flag .nm{margin-top:6px;font-size:.8rem;color:var(--muted);font-weight:600}
+  .gnote{margin-top:18px;display:flex;align-items:center;gap:10px;background:var(--navy-2);border:1px solid var(--line);border-radius:12px;padding:14px 18px;font-size:.95rem;color:var(--muted)}.gnote b{color:var(--green)}
+
+  /* 사용법 */
+  .use{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:8px}
+  .use .card{text-align:center} .use .ic{margin:0 auto 12px}
+
+  /* 카드·안내 문구 */
+  .trial{display:inline-flex;align-items:center;gap:8px;background:rgba(61,181,110,.12);border:1px solid rgba(61,181,110,.4);color:var(--green);font-weight:800;border-radius:999px;padding:9px 18px;font-size:.92rem;margin-top:8px}
+  .plans{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin:30px auto 0;max-width:720px;align-items:stretch}
+  .plan{background:var(--navy-2);border:1px solid var(--line);border-radius:var(--radius);padding:28px 24px;display:flex;flex-direction:column}
+  .plan.best{border-color:var(--red);box-shadow:0 20px 50px rgba(232,72,61,.18);position:relative}
+  .plan .tag{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--red);color:#fff;font-weight:800;font-size:.76rem;padding:5px 14px;border-radius:999px}
+  .plan .nm{font-weight:800;font-size:1.05rem}
+  .plan .price{font-size:2.1rem;font-weight:900;margin-top:8px;letter-spacing:-0.03em}
+  .plan .price small{font-size:.9rem;color:var(--muted);font-weight:600;letter-spacing:0}
+  .plan ul{list-style:none;margin:18px 0 4px;display:flex;flex-direction:column;gap:9px}
+  .plan li{color:var(--muted);font-size:.92rem;display:flex;gap:8px}.plan li::before{content:"✓";color:var(--green);font-weight:900}
+  .plan li b{color:var(--text);font-weight:800}
+  .plan li .new{color:var(--green);font-weight:800}
+  .plan .planfree{display:inline-block;margin-top:10px;background:rgba(61,181,110,.14);border:1px solid rgba(61,181,110,.4);color:var(--green);font-weight:800;font-size:.86rem;border-radius:999px;padding:6px 14px}
+  .plan .btn{width:100%;justify-content:center;margin-top:auto}
+  .pnote{color:var(--dim);font-size:.82rem;font-weight:500}
+  .plan li > span{text-align:left}
+  .slotnote{max-width:640px;margin:22px auto 0;color:var(--muted);font-size:.95rem;background:var(--navy);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+  .slotnote b{color:var(--text)}
+  .openfree{max-width:720px;margin:20px auto 0;background:rgba(61,181,110,.12);border:1px solid rgba(61,181,110,.4);color:var(--text);font-weight:700;font-size:1rem;border-radius:12px;padding:14px 16px}
+  .sibling{max-width:720px;margin:14px auto 0;color:var(--muted);font-size:.9rem}
+  .sibling b{color:var(--text)}
+  .pricenote{color:var(--dim);font-size:.84rem;text-align:center;margin-top:18px}
+  /* 비교표 */
+  .cmp-h{margin-top:52px;font-size:1.15rem;font-weight:800;color:var(--text)}
+  .cmp-s{color:var(--muted);font-size:.9rem;margin-top:6px;margin-bottom:22px}
+  .compare{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);border-radius:var(--radius);background:var(--navy-2)}
+  .ctable{width:100%;min-width:0;border-collapse:collapse;font-size:.92rem}
+  .ctable th,.ctable td{padding:13px 12px;border-bottom:1px solid var(--line);text-align:center}
+  .ctable thead th{background:var(--navy-3);vertical-align:top}
+  .ctable thead .pn{font-weight:800;font-size:1rem;color:var(--text)}
+  .ctable thead .pp{display:block;color:var(--muted);font-size:.82rem;font-weight:700;margin-top:3px}
+  .ctable thead th.best .pn{color:var(--red)}
+  .ctable thead th.best .star{display:block;font-size:.72rem;color:var(--red);font-weight:800;margin-bottom:3px}
+  .ctable tbody td:first-child,.ctable thead th:first-child{text-align:left;color:var(--text);font-weight:700;background:var(--navy-2);position:sticky;left:0;z-index:1;min-width:150px}
+  .ctable th:nth-child(3),.ctable td:nth-child(3){background:rgba(232,72,61,.06)}
+  .ctable .yes{color:var(--green);font-weight:900;font-size:1.05rem}
+  .ctable .no{color:var(--dim);font-weight:700}
+  .ctable .val{color:var(--text);font-weight:800}
+  .ctable .grp td{background:var(--navy);color:var(--green);font-weight:800;font-size:.78rem;text-align:left;letter-spacing:.05em}
+  .ctable tfoot td{border-bottom:none;padding-top:16px;padding-bottom:16px}
+  .ctable tfoot .btn{width:100%;justify-content:center;font-size:.86rem;padding:10px 12px}
+  .cmp-note{color:var(--dim);font-size:.82rem;text-align:center;margin-top:14px}
+
+  /* 최종 CTA */
+  .final{text-align:center;background:linear-gradient(180deg,var(--navy-2),var(--navy));border-top:1px solid var(--line)}
+  .final .kakao-note{margin-top:14px;color:var(--muted);font-size:.9rem}
+
+  footer{border-top:1px solid var(--line);padding:32px 0;color:var(--muted);font-size:.84rem}
+  footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:14px;align-items:center}
+  footer a.mail{color:var(--green);text-decoration:none;font-weight:700}
+  .biz{color:var(--dim);font-size:.78rem;line-height:1.8}
+
+  @media (max-width:860px){
+    .g4{grid-template-columns:repeat(2,1fr)} .g3,.steps,.use{grid-template-columns:1fr}
+    .plans{grid-template-columns:1fr;max-width:420px;margin-left:auto;margin-right:auto}
+    .countries{grid-template-columns:repeat(4,1fr)}
+    .navbadge{display:none}
+  }
+  @media (max-width:480px){
+    .g2,.g4{grid-template-columns:1fr}
+    .countries{grid-template-columns:repeat(3,1fr)}
+    .hero .cta .btn{width:100%;justify-content:center}
+    /* 휴대폰: 사전신청이 스크롤 없이 보이도록 위쪽 여백을 줄임 */
+    .nav .wrap{height:56px}
+    .hero{padding-top:18px}
+    .hero .pill{margin-bottom:12px;padding:6px 14px;font-size:.95rem}
+    .hero h1{font-size:1.62rem;line-height:1.25}
+    .hero p.sub{margin-top:10px;font-size:1.06rem;line-height:1.5}
+    .apply{margin-top:16px}
+    .btn-kakao{padding:15px 12px;font-size:1.08rem}
+    .erow button{padding:14px 16px;font-size:1.06rem}
+    .points li{font-size:1.04rem}
+  }
+</style>
+</head>
+<body>
+
+<!-- 1. 상단바 -->
+<nav class="nav"><div class="wrap">
+  <div class="brand">
+    <img src="nochijima_logo.png" alt="놓치지마" class="logo-img" onerror="this.style.display='none';document.getElementById('le').style.display='inline-flex';">
+    <span id="le" class="logo-emoji">🌍</span> 놓치지마
+  </div>
+  <span class="navbadge"><span class="blink"></span> 30개국 감시 중</span>
+  <span class="spacer"></span>
+  <a href="#apply" class="btn btn-red btn-sm" data-go="apply">사전신청</a>
+</div></nav>
+
+<!-- 2. 히어로 (첫 화면에서 바로 사전신청) -->
+<header class="hero"><div class="wrap">
+  <span class="pill"><span class="blink"></span> 해외에 자녀를 둔 부모님께</span>
+  <h1>자녀 사는 도시에<br>큰일이 나면, 카톡으로 바로.<br><span class="grn">아무 일 없으면 조용히.</span></h1>
+  <p class="sub">지진·폭우·재난·비자 변화를 현지 정부·기상청 같은 공식 기관에서 확인해 한국어로 알려드려요.</p>
+
+  <div class="apply" id="apply">
+    <!-- 사전신청은 카카오톡 채널 하나로만 받습니다 (링크: 맨 아래 스크립트의 KAKAO_CHANNEL_URL) -->
+    <a id="kakaoBtn" class="btn btn-kakao" href="#" target="_blank" rel="noopener">💬 카카오톡 채널 추가하고 사전신청</a>
+    <p class="khelp" id="kHelp">버튼을 누르면 카카오톡이 열려요.<br><b>"채널 추가"</b>만 누르면 끝이에요.</p>
+    <div class="adone kdone" id="kDone">
+      <b>💬 카카오톡에서 "채널 추가"를 눌러 주세요</b>
+      <p>추가하셨다면 사전신청 완료예요. 오픈하면 채널로 알려드릴게요.</p>
+      <p class="ktip">채널 채팅으로 <b>자녀가 사는 나라와 도시</b>를 보내주시면 그 지역 소식부터 챙겨 드릴게요. <span>(예: 일본 오사카)</span></p>
+      <a href="signup.html" id="pickLink">목록에서 골라서 카톡으로 보내기 →</a>
+    </div>
+    <p class="anote" id="qNote">지금은 사전신청 단계</p>
+  </div>
+  <ul class="points">
+    <li><b>매일 찾아보지 않아도 돼요</b> — 카톡 친구 추가 한 번이면 끝</li>
+    <li><b>하루 한 번 요약을 기다리지 않고</b>, 큰일은 확인되는 대로 바로</li>
+    <li><b>큰일이 아니면 알림을 보내지 않아요</b> — 평소엔 조용해요</li>
+  </ul>
+  <a href="#receive" class="more">어떤 알림이 오나요? ↓</a>
+</header>
+
+<!-- 3. 문제 제기 -->
+<section class="band"><div class="wrap">
+  <p class="eyebrow">이런 경험, 있으신가요?</p>
+  <h2>해외 소식, <span class="red">놓쳐서 손해 본 적</span> 있나요?</h2>
+  <p class="lead">멀리 있는 나라의 변화는 한국 뉴스에 잘 나오지 않습니다. 그래서 정작 나와 가족에게 중요한 소식일수록 뒤늦게 알게 됩니다.</p>
+  <div class="grid g4" style="margin-top:28px">
+    <div class="prob"><div class="k">💱 환율</div><p>환전 타이밍을 놓쳐 손해</p></div>
+    <div class="prob"><div class="k">🌏 재난</div><p>현지 지진·태풍을 뒤늦게 확인</p></div>
+    <div class="prob"><div class="k">📋 비자</div><p>체류·비자 규정이 바뀐 걸 몰라서</p></div>
+    <div class="prob"><div class="k">🚗 제도</div><p>운전면허·거주 제도 변경을 놓쳐서</p></div>
+  </div>
+</div></section>
+
+<!-- 4. 이런 걸 받아요 (카톡 폰 목업) -->
+<section id="receive"><div class="wrap center">
+  <p class="eyebrow">이런 걸 받아요</p>
+  <h2>급한 일은 확인되는 대로 카톡으로</h2>
+  <p class="lead">실제 발송 형식 그대로예요. 급한 일은 확인되는 대로 바로 알림으로 보내드려요.</p>
+  <div class="phonewrap">
+    <div class="phone"><div class="pscreen">
+      <div class="ptop"><span class="dot">🌍</span> 놓치지마</div>
+      <div class="pchat">
+        <div class="kmsg">
+          <div class="kname">놓치지마</div>
+          <div class="krow">
+            <div class="kbubble"><b class="rd">🚨 [일본] 지진 발생</b>
+규모 5.8 · 현지 02:23 <span class="muted">(한국 02:23)</span>
+현지 가족 안부 확인해보세요</div>
+            <span class="ktime">오전 2:23</span>
+          </div>
+        </div>
+        <div class="kmsg">
+          <div class="krow">
+            <div class="kbubble"><b class="rd">💱 [엔화] 30일 만에 최저</b>
+100엔 850원 · 전날보다 <span class="rd">▼0.4%</span>
+최근 30일 범위 850~886원
+<span class="muted">송금 보낼 때 858원 (하나은행 고시)</span></div>
+            <span class="ktime">오후 3:10</span>
+          </div>
+        </div>
+        <div class="kmsg">
+          <div class="krow">
+            <div class="kbubble"><b class="gr">📋 [일본] 영주허가 요건 강화</b>
+평균연봉 이상 조건 추가
+해당되면 미리 준비해두세요
+<span class="muted">출처: NHK</span></div>
+            <span class="ktime">오후 5:41</span>
+          </div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+  <p class="pricenote" style="margin-top:22px">※ 위 환율·정책 내용은 형식을 보여주는 <b>예시</b>입니다. 실제 값은 신청 후 감시 결과로 전송됩니다.</p>
+</div></section>
+
+<!-- 5. 알림 예시(움직이는 피드) -->
+<section class="band center"><div class="wrap">
+  <p class="eyebrow">알림 예시</p>
+  <h2>지금도 지켜보고 있습니다</h2>
+  <div class="live"><span class="blink"></span> 수 분~수십 분 간격으로 확인합니다</div>
+  <div class="feed"><div class="track" id="track">
+    <div class="noti r"><div class="top"><span>🌏</span><span class="app">놓치지마</span><span class="t">방금</span></div><div class="ti">[일본] 지진 발생</div><div class="bd">규모 6.2 · 현지 02:23 (한국 02:23)</div></div>
+    <div class="noti r"><div class="top"><span>💱</span><span class="app">놓치지마</span><span class="t">3분 전</span></div><div class="ti">[엔화] 30일 만에 최저</div><div class="bd">100엔 850원 · 전날보다 ▼0.4%</div></div>
+    <div class="noti g"><div class="top"><span>📋</span><span class="app">놓치지마</span><span class="t">12분 전</span></div><div class="ti">[일본] 영주허가 요건 강화</div><div class="bd">평균연봉 이상 조건 추가</div></div>
+    <div class="noti r"><div class="top"><span>🌪️</span><span class="app">놓치지마</span><span class="t">28분 전</span></div><div class="ti">[필리핀] 태풍 경보</div><div class="bd">국제 재난경보(GDACS) Orange 등급</div></div>
+    <div class="noti g"><div class="top"><span>🚗</span><span class="app">놓치지마</span><span class="t">41분 전</span></div><div class="ti">[대만] 음주운전 처벌 강화</div><div class="bd">면허 취소·차량 압수</div></div>
+    <div class="noti r"><div class="top"><span>🔥</span><span class="app">놓치지마</span><span class="t">1시간 전</span></div><div class="ti">[세르비아] 산불 경보</div><div class="bd">국제 재난경보(GDACS) Orange 등급</div></div>
+    <div class="noti g"><div class="top"><span>📋</span><span class="app">놓치지마</span><span class="t">2시간 전</span></div><div class="ti">[캐나다] 취업허가 요건 변경</div><div class="bd">IRCC 지침 개정</div></div>
+    <div class="noti r"><div class="top"><span>💱</span><span class="app">놓치지마</span><span class="t">3시간 전</span></div><div class="ti">[미국달러] 환율 변동</div><div class="bd">1달러 1,412원 · 전날보다 ▲1.6%</div></div>
+  </div></div>
+  <p class="pricenote" style="margin-top:16px">움직이는 예시입니다 · 마우스를 올리면 멈춰요</p>
+</div></section>
+
+<!-- 6. 작동 3단계 -->
+<section><div class="wrap center">
+  <p class="eyebrow">어떻게 작동하나요</p>
+  <h2>지켜보고, 걸러내고, 도달시킵니다</h2>
+  <div class="steps" style="text-align:left">
+    <div class="step"><span class="n">1</span><span class="ic">👀</span><h3>지켜봅니다</h3><p>현지 공영방송·정부 공식 소스와 국제 재난·환율을 수 분~수십 분 간격으로 자동 확인합니다.</p></div>
+    <div class="step"><span class="n">2</span><span class="ic">🔍</span><h3>걸러냅니다</h3><p>신뢰할 수 있는 소식만, 중요도를 판단해 한국어로 정리합니다.</p></div>
+    <div class="step"><span class="n">3</span><span class="ic">💬</span><h3>도달시킵니다</h3><p>당신이 고른 지역의 소식을 확인되는 대로 카카오톡으로 보내드립니다.</p></div>
+  </div>
+</div></section>
+
+<!-- 7. 왜 좋은가 -->
+<section class="band"><div class="wrap">
+  <p class="eyebrow">왜 놓치지마인가</p>
+  <h2>정보가 아니라 <span class="red">'도달'</span>을 팝니다</h2>
+  <div class="why grid g2" style="margin-top:28px">
+    <div class="card"><span class="ic">💬</span><div><h3>카톡으로 도달</h3><p>찾아보지 않아도 중요한 변화가 카카오톡으로 옵니다.</p></div></div>
+    <div class="card"><span class="ic">🇰🇷</span><div><h3>한국어로 정리</h3><p>현지어 뉴스를 한국어로 깔끔하게. 어려운 원문을 읽을 필요 없어요.</p></div></div>
+    <div class="card"><span class="ic">🛡️</span><div><h3>신뢰 소스만</h3><p>공영방송·정부·국가통신사만. 개인 블로그·편향 매체는 자동 제외.</p></div></div>
+    <div class="card"><span class="ic">🕐</span><div><h3>현지시각까지</h3><p>"현지 02:23 (한국 02:23)"처럼 그 나라 시각을 함께 알려드려요.</p></div></div>
+    <div class="card"><span class="ic">🌏</span><div><h3>재난은 전 세계</h3><p>지진·태풍·산불·홍수·화산은 국가와 상관없이 전 세계를 감시합니다.</p></div></div>
+    <div class="card"><span class="ic">🌧️</span><div><h3>폭우는 강수량으로 직접</h3><p>기상청 특보에만 기대지 않고, <b>고른 지역의 강수량(mm)</b>을 직접 확인해 지역 폭우를 잡습니다.</p></div></div>
+    <div class="card"><span class="ic">📍</span><div><h3>내 지역만 골라 받기</h3><p>도쿄만, 캘리포니아만 — 나라 전체 소식이 아니라 <b>자녀가 사는 도시 주변의 지진·폭우·재난</b> 소식만 골라 받아요. 도시는 2곳까지. (환율·정책은 나라 단위)</p></div></div>
+  </div>
+</div></section>
+
+<!-- 8. 신뢰 원칙 -->
+<section><div class="wrap">
+  <p class="eyebrow">신뢰가 전부입니다</p>
+  <h2>아무 뉴스나 쓰지 않습니다</h2>
+  <p class="lead">잘못된 정보 하나가 신뢰를 무너뜨립니다. 그래서 소스를 엄격하게 제한합니다.</p>
+  <div style="margin-top:24px">
+    <div class="trow"><span class="b ok">✓</span><p><b>공영방송·정부 공식 소스만 사용합니다.</b> 각 나라의 대표 언론·국가통신사·정부 발표만 통과시킵니다.</p></div>
+    <div class="trow"><span class="b no">✕</span><p><b>개인 블로그·편향 매체는 제외합니다.</b> 광고성·선정성·정치 편향 매체는 자동으로 걸러냅니다.</p></div>
+    <div class="trow"><span class="b no">✕</span><p><b>전쟁·정치 분쟁은 다루지 않습니다.</b> 생활에 직접 필요한 정보에만 집중합니다.</p></div>
+  </div>
+  <div class="srcs">
+    <span class="src">NHK</span><span class="src">BBC</span><span class="src">AP</span><span class="src">Reuters</span>
+    <span class="src">ARD·ZDF</span><span class="src">France 24</span><span class="src">The Straits Times</span>
+    <span class="src">USGS</span><span class="src">GDACS</span><span class="src">open-meteo</span><span class="src">일본 기상청(JMA)</span><span class="src">미국 기상청(NWS)</span><span class="src">각국 정부 공식</span>
+  </div>
+  <div class="notsup">
+    <b>현재 지원하지 않는 나라: 중국 · 홍콩 · UAE · 캄보디아 · 미얀마</b>
+    <p>현지 공영방송·대표 언론의 자동 수집이 어렵거나, 국영 선전매체 위주라 저희 신뢰 기준에 맞지 않습니다. 신뢰할 수 있는 소스가 확보되면 추가하겠습니다.</p>
+  </div>
+</div></section>
+
+<!-- 9. 지원 30개국 -->
+<section class="band"><div class="wrap">
+  <p class="eyebrow">지원 범위</p>
+  <h2>30개국을 지켜봅니다</h2>
+  <p class="lead">비자·정책·생활 제도는 아래 30개국을 감시합니다.</p>
+  <div class="countries">
+    <div class="flag"><div class="f">🇯🇵</div><div class="nm">일본</div></div><div class="flag"><div class="f">🇻🇳</div><div class="nm">베트남</div></div><div class="flag"><div class="f">🇹🇼</div><div class="nm">대만</div></div><div class="flag"><div class="f">🇹🇭</div><div class="nm">태국</div></div><div class="flag"><div class="f">🇵🇭</div><div class="nm">필리핀</div></div><div class="flag"><div class="f">🇲🇾</div><div class="nm">말레이시아</div></div><div class="flag"><div class="f">🇸🇬</div><div class="nm">싱가포르</div></div>
+    <div class="flag"><div class="f">🇮🇩</div><div class="nm">인도네시아</div></div><div class="flag"><div class="f">🇺🇸</div><div class="nm">미국</div></div><div class="flag"><div class="f">🇨🇦</div><div class="nm">캐나다</div></div><div class="flag"><div class="f">🇦🇺</div><div class="nm">호주</div></div><div class="flag"><div class="f">🇬🇧</div><div class="nm">영국</div></div><div class="flag"><div class="f">🇩🇪</div><div class="nm">독일</div></div><div class="flag"><div class="f">🇫🇷</div><div class="nm">프랑스</div></div>
+    <div class="flag"><div class="f">🇮🇳</div><div class="nm">인도</div></div><div class="flag"><div class="f">🇮🇹</div><div class="nm">이탈리아</div></div><div class="flag"><div class="f">🇪🇸</div><div class="nm">스페인</div></div><div class="flag"><div class="f">🇳🇱</div><div class="nm">네덜란드</div></div><div class="flag"><div class="f">🇨🇭</div><div class="nm">스위스</div></div><div class="flag"><div class="f">🇧🇷</div><div class="nm">브라질</div></div><div class="flag"><div class="f">🇲🇽</div><div class="nm">멕시코</div></div>
+    <div class="flag"><div class="f">🇳🇿</div><div class="nm">뉴질랜드</div></div><div class="flag"><div class="f">🇷🇺</div><div class="nm">러시아</div></div><div class="flag"><div class="f">🇸🇪</div><div class="nm">스웨덴</div></div><div class="flag"><div class="f">🇹🇷</div><div class="nm">튀르키예</div></div><div class="flag"><div class="f">🇵🇹</div><div class="nm">포르투갈</div></div><div class="flag"><div class="f">🇵🇱</div><div class="nm">폴란드</div></div><div class="flag"><div class="f">🇦🇹</div><div class="nm">오스트리아</div></div>
+    <div class="flag"><div class="f">🇧🇪</div><div class="nm">벨기에</div></div><div class="flag"><div class="f">🇦🇷</div><div class="nm">아르헨티나</div></div>
+  </div>
+  <div class="gnote">🌍 <span>환율과 지진·태풍·산불·홍수·화산은 <b>전 세계</b>를 대상으로 감시합니다.</span></div>
+</div></section>
+
+<!-- 10. 사용법 -->
+<section><div class="wrap center">
+  <p class="eyebrow">이렇게 쓰세요</p>
+  <h2>사전신청은 한 번이면 끝</h2>
+  <div class="use">
+    <div class="card"><span class="ic">💬</span><h3>1. 사전신청</h3><p>카카오톡 채널 추가 한 번이면 끝이에요. 이름·이메일·전화번호는 적지 않아요.</p></div>
+    <div class="card"><span class="ic">🗺️</span><h3>2. 나라·도시 알려주기 (선택)</h3><p>채널 채팅으로 자녀가 사는 나라와 도시를 보내주세요. <a href="signup.html" style="color:var(--green);font-weight:700">목록에서 골라 보내기</a>도 돼요.</p></div>
+    <div class="card"><span class="ic">🔔</span><h3>3. 오픈 알림</h3><p>서비스가 열리면 카카오톡 채널로 알려드려요. 그 뒤엔 급한 소식을 확인되는 대로 바로 보내드려요.</p></div>
+  </div>
+  <div style="margin-top:30px"><a href="#apply" class="btn btn-red" data-go="apply">사전신청하기 <span>↑</span></a></div>
+</div></section>
+
+<!-- 12. 누구를 위한 -->
+<section><div class="wrap">
+  <p class="eyebrow">이런 분들을 위해</p>
+  <h2>그 나라에 <span class="grn">'연결된'</span> 사람들</h2>
+  <div class="grid g4" style="margin-top:28px">
+    <div class="card center"><span class="ic">💑</span><h3>국제커플</h3><p>서로의 나라 소식을 함께 챙기고 싶은 분</p></div>
+    <div class="card center"><span class="ic">🎓</span><h3>유학생·부모</h3><p>현지 규정 변화와 자녀 안전이 걱정되는 분</p></div>
+    <div class="card center"><span class="ic">👨‍👩‍👧</span><h3>가족·지인</h3><p>해외에 소중한 사람이 있는 분</p></div>
+    <div class="card center"><span class="ic">📈</span><h3>해외 투자자</h3><p>환율·정책 변화를 빠르게 알아야 하는 분</p></div>
+  </div>
+</div></section>
+
+<!-- 12.5 발송 기준 안내 -->
+<section class="band"><div class="wrap">
+  <p class="eyebrow">투명한 기준</p>
+  <h2>알림 발송 기준 안내</h2>
+  <p class="lead">어떤 기준으로 알려드리는지 미리 공개합니다.</p>
+  <div class="grid g2" style="margin-top:26px">
+    <div class="card">
+      <h3>무엇을 · 어떤 기준으로</h3>
+      <ul style="list-style:none;margin:14px 0 0;padding:0;display:flex;flex-direction:column;gap:10px;color:var(--muted);font-size:.93rem">
+        <li>🌍 <b style="color:var(--text)">지진</b> — 규모 4.0 이상 <span style="opacity:.8">(일본 4.5+ · 미국 알래스카 5.0+)</span></li>
+        <li>🚨 <b style="color:var(--text)">재난</b> — 산불·홍수·태풍·화산 경보 <span style="opacity:.8">(국제 재난경보 GDACS)</span></li>
+        <li>🌪️ <b style="color:var(--text)">미국 특유 재해</b> — 토네이도·허리케인·돌발홍수·눈보라 <span style="opacity:.8">(미국 기상청 NWS)</span></li>
+        <li>🌧️ <b style="color:var(--text)">폭우·우박</b> — 하루 강수량 30·50·100mm · 우박(뇌우 동반)</li>
+        <li>🛫 <b style="color:var(--text)">대형 사고</b> — 항공기 추락·붕괴·폭발·침몰·탈선 등 <span style="opacity:.8">(사망·실종 5명 이상 등 큰 사고만 · 신뢰 언론)</span></li>
+        <li>💱 <b style="color:var(--text)">환율</b> — 전날 대비 큰 변동 · 급변(3% 이상) · 최근 30일 최저/최고 <span style="opacity:.8">(하나은행 매매기준율 · 통화마다 평소 움직임에 맞춘 기준)</span></li>
+        <li>📋 <b style="color:var(--text)">정책</b> — 비자·체류·면허·행정 규정 변경 <span style="opacity:.8">(신뢰 언론만)</span></li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>어떻게 보내나</h3>
+      <ul style="list-style:none;margin:14px 0 0;padding:0;display:flex;flex-direction:column;gap:12px;color:var(--muted);font-size:.93rem">
+        <li>⚡ <b style="color:var(--text)">긴급</b>(큰 지진·경보·환율 급변·30일 최저/최고·토네이도)<br>→ <span style="color:var(--red);font-weight:800">확인되는 대로 바로 카카오톡</span> <span style="opacity:.8">(하루 최대 6건)</span></li>
+        <li>📩 <b style="color:var(--text)">나머지</b>(정책·소규모 재난·일반 변동)<br>→ <span style="color:var(--green);font-weight:800">매주 소식 요약</span></li>
+      </ul>
+      <p style="color:var(--dim);font-size:.86rem;margin-top:16px">급하지 않은 소식은 모아서 매주 한 번 정리해 드려요.</p>
+    </div>
+  </div>
+  <div class="notsup" style="margin-top:22px">
+    <b>⚠️ 꼭 알아두세요</b>
+    <p>본 서비스는 <b>참고용 정보</b>이며, 공식 재난 경보나 긴급 대피 지시를 <b>대체하지 않습니다.</b> 생명·안전이 걸린 상황은 반드시 현지 공식 기관(119·기상청·대사관 등)의 안내를 따르세요.</p>
+    <p>정보는 외부 공개 소스에 의존하여 <b>지연·누락·오류가 있을 수 있으며</b>, 모든 재해를 100% 감지하지는 못합니다. 알림은 수 분~수십 분 간격으로 확인되어 실시간이 아닙니다.</p>
+    <p><b>알림이 오지 않았다고 해서 안전하다는 뜻은 아닙니다.</b> 걱정되는 상황이면 가족에게 직접 연락해 확인하세요.</p>
+    <p>놓치지마는 공식 기관과 공영·주요 언론 자료를 바탕으로 알림을 보내지만, 원 자료의 오류나 번역 과정에서 내용이 틀리거나 늦을 수 있습니다. 틀린 내용을 확인하면 바로 정정 알림을 보내드립니다. 중요한 결정은 꼭 해당 국가의 공식 기관에서 한 번 더 확인해 주세요.</p>
+  </div>
+</div></section>
+
+<!-- 13. 최종 CTA -->
+<section class="final"><div class="wrap">
+  <p class="eyebrow">지금 시작하세요</p>
+  <h2>놓치지 마세요.<br>중요한 소식은 <span class="grn">먼저 옵니다.</span></h2>
+  <div style="margin-top:28px"><a href="#apply" class="btn btn-red" data-go="apply">사전신청하기 <span>↑</span></a></div>
+  <p class="kakao-note">💬 카카오톡 알림을 준비하고 있습니다</p>
+</div></section>
+
+<!-- 14. 푸터 -->
+<footer><div class="wrap">
+  <div>
+    <div style="font-weight:800;color:var(--text);margin-bottom:6px">🌍 놓치지마</div>
+    문의·제휴 : [연락처]
+  </div>
+  <div class="biz">
+    [연락처] &nbsp;|&nbsp; <a href="privacy.html" style="color:inherit;text-decoration:underline">개인정보처리방침</a><br>
+    © 2026 놓치지마 (nochijima). All rights reserved.
+  </div>
+</div></footer>
+
+<script>
+  /* ═══════════ 직접 채울 곳 (따옴표 안에 붙여넣기) ═══════════
+     ① 카카오톡 채널 친구추가 링크
+        예: "https://pf.kakao.com/_abcdef/friend"   ← 끝에 /friend 를 붙이면 '채널 추가' 화면이 바로 열려요.
+        ※ 사전신청은 이 버튼 하나로만 받습니다. 비워 두면 버튼과 안내가 숨겨집니다(죽은 버튼 방지).
+     ② 방문자 분석(Umami) 웹사이트 ID
+        예: "1a2b3c4d-1234-5678-9abc-def012345678"   ← 비워 두면 분석 없이 동작합니다. */
+  const KAKAO_CHANNEL_URL = "https://pf.kakao.com/_RxbxjiX/friend";
+  const UMAMI_WEBSITE_ID  = "";
+  /* ═══════════════════════════════════════════════════════════ */
+  /* 방문자 분석: 쿠키·개인정보 없이 방문 수·버튼 클릭·스크롤 깊이만 셉니다 */
+  /* 내 방문 제외: 주소 뒤에 ?me=1 을 붙여 한 번 열면 이 브라우저는 방문 집계에서 빠집니다. (?me=0 으로 열면 다시 집계)
+     이 브라우저 안에만 저장되고 어디로도 전송되지 않습니다. */
+  let ME_OFF = false;
+  try{
+    const me = new URLSearchParams(location.search).get('me');
+    if(me === '1') localStorage.setItem('umami.disabled', '1');
+    if(me === '0') localStorage.removeItem('umami.disabled');
+    ME_OFF = localStorage.getItem('umami.disabled') === '1';
+    if(me === '1' || me === '0'){
+      const n = document.createElement('div');
+      n.textContent = ME_OFF ? '✅ 이 브라우저는 방문 집계에서 제외됩니다' : '방문 집계에 다시 포함됩니다';
+      n.style.cssText = 'position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:9999;background:#141C2B;color:#EAF0F8;border:1px solid #3DB56E;border-radius:12px;padding:12px 16px;font-size:15px;font-weight:700;max-width:90vw;text-align:center';
+      (document.body || document.documentElement).appendChild(n);
+      setTimeout(function(){ n.remove(); }, 6000);
+    }
+  }catch(e){}
+  if(UMAMI_WEBSITE_ID && !ME_OFF){
+    const u = document.createElement('script'); u.defer = true;
+    u.src = 'https://cloud.umami.is/script.js'; u.setAttribute('data-website-id', UMAMI_WEBSITE_ID);
+    document.head.appendChild(u);
+  }
+  const pending = [];
+  function track(name){
+    try{
+      if(window.umami){ window.umami.track(name); }
+      else if(UMAMI_WEBSITE_ID){ pending.push(name); }      // 분석 도구가 늦게 뜨면 잠깐 모아 뒀다가 보냄
+    }catch(e){}
+  }
+  if(UMAMI_WEBSITE_ID){
+    const iv = setInterval(function(){ if(window.umami){ pending.splice(0).forEach(n=>{ try{ window.umami.track(n); }catch(e){} }); clearInterval(iv); } }, 500);
+    setTimeout(function(){ clearInterval(iv); }, 15000);
+  }
+
+  /* 카카오톡 채널 버튼 (사전신청은 이것 하나) */
+  (function(){
+    const k = document.getElementById('kakaoBtn');
+    if(!KAKAO_CHANNEL_URL){            // 링크가 없으면 죽은 버튼이 보이지 않게
+      k.style.display = 'none'; document.getElementById('kHelp').style.display = 'none';
+      return;
+    }
+    k.href = KAKAO_CHANNEL_URL;
+    k.addEventListener('click', function(){
+      track('카톡 채널 버튼 클릭');
+      document.getElementById('kHelp').style.display = 'none';
+      document.getElementById('kDone').style.display = 'block';   // 카톡에서 돌아오면 보이는 안내
+    });
+    document.getElementById('pickLink').addEventListener('click', function(){ track('관심나라 페이지로 이동'); });
+  })();
+
+  /* 아래쪽 '사전신청하기' 버튼 → 첫 화면 신청칸으로 */
+  document.querySelectorAll('[data-go="apply"]').forEach(function(a){
+    a.addEventListener('click', function(){ track('사전신청 바로가기 클릭'); });
+  });
+
+  /* 스크롤 깊이: 25·50·75·100% 를 각각 한 번씩만 기록 */
+  (function(){
+    const marks = [25,50,75,100], sent = {};
+    let timer = null;
+    function check(){
+      timer = null;
+      const h = document.documentElement.scrollHeight - window.innerHeight;
+      const pct = h > 0 ? (window.scrollY / h) * 100 : 100;
+      marks.forEach(function(m){ if(pct >= m - 0.5 && !sent[m]){ sent[m] = true; track('스크롤 ' + m + '%'); } });
+    }
+    window.addEventListener('scroll', function(){ if(!timer){ timer = setTimeout(check, 200); } }, {passive:true});
+  })();
+
+  /* 예시 카드 끊김 없이 순환 */
+  (function(){ var t=document.getElementById('track'); if(t){ t.innerHTML += t.innerHTML; } })();
+</script>
+</body>
+</html>

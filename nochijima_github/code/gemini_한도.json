@@ -1,0 +1,21 @@
+{
+  "설명": "Gemini 한도. 2026-10-14 AI Studio 에서 확인한 값(무료 등급). 모델마다 따로 셉니다. warn_at = 이 횟수에 닿으면 시스템 알림(하루 1번). pace_per_minute = 모든 감시를 합쳐 1분에 보내는 최대 호출 수(한도 15보다 낮게).",
+  "확인됨": true,
+  "등급": "무료",
+  "daily_limit": 500,
+  "rpm_limit": 15,
+  "warn_at": 400,
+  "pace_per_minute": 10,
+  "models": {
+    "gemini-3.1-flash-lite": {
+      "daily_limit": 500,
+      "rpm_limit": 15,
+      "warn_at": 400
+    },
+    "gemini-3.5-flash-lite": {
+      "daily_limit": 500,
+      "rpm_limit": 15,
+      "warn_at": 400
+    }
+  }
+}

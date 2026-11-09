@@ -1,0 +1,6 @@
+{
+  "설명": "이 파일을 복사해 이름을 kakao_config.json 으로 바꾸고 값을 넣으세요(developers.kakao.com → 내 애플리케이션). client_secret 은 쓰지 않으면 빈칸으로 두세요. kakao_config.json 은 깃허브에 올라가지 않습니다.",
+  "rest_api_key": "YOUR_KEY_HERE",
+  "redirect_uri": "YOUR_REDIRECT_URI_HERE",
+  "client_secret": ""
+}
